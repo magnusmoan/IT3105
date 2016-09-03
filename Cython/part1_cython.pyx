@@ -1,9 +1,12 @@
-from copy import copy
+cimport cython
+from libc.stdlib cimport malloc, free
+from input_handler import get_N_from_user, get_starting_positions_from_user
 from time import time
 
-cdef diagonal_conflict(int row, int column, int[] column_list):
+cdef diagonal_conflict(int row, int column, int *column_list, int n):
     cdef int c_col, c_row
-    for c_col, c_row in enumerate(column_list):
+    for c_col in range(n):
+        c_row = column_list[c_col]
         if (c_row == row and c_col == column) or c_row == -1 :
             continue
 
@@ -23,31 +26,36 @@ def remove_all_negative(array_with_zeros):
 
     return non_zero_array
 
-def starting_positions_valid(starting_positions, n):
-    number_of_placed_queens = len(starting_positions)
+def starting_positions_valid(starting_positions):
+    cdef int number_of_placed_queens = len(starting_positions)
+    cdef int *test, column, row
 
     if duplicates_in_array(starting_positions):
         print "Duplicates"
         return False
-
+    
+    test = <int *>malloc(number_of_placed_queens*cython.sizeof(int))
+    for i in xrange(number_of_placed_queens):
+        test[i] = starting_positions[i]
+    
     for column in range(number_of_placed_queens):
-        if diagonal_conflict(starting_positions[column], column, starting_positions):
+        row = starting_positions[column]
+        if diagonal_conflict(row, column, test, number_of_placed_queens):
             print "Diagonal conflict"
             return False
 
     return True
 
- 
-def try_col(int col, int[] col_list, rows_set):
+cdef try_col(int col, int *col_list, rows_set):
     if col == N:
         global COUNTER
         COUNTER += 1
-        print map(lambda x: x + 1, col_list)
+        #print map(lambda x: x + 1, col_list)
         return
  
     cdef int row
     for row in rows_set:
-        if not diagonal_conflict(row, col, col_list):
+        if not diagonal_conflict(row, col, col_list, N):
  
             col_list[col] = row
             rows_set.remove(row)
@@ -58,12 +66,12 @@ def try_col(int col, int[] col_list, rows_set):
     return
  
  
-def backtracking(int[] starting_positions, rows_set):
+cdef backtracking(int *c_starting_positions, starting_positions, rows_set):
     starting_positions_without_empty = remove_all_negative(starting_positions)
  
-    if starting_positions_valid(starting_positions_without_empty, N):
+    if starting_positions_valid(starting_positions_without_empty):
         print "Valid starting positions, starting backtracking search for feasable solution"
-        try_col(len(starting_positions_without_empty), starting_positions, rows_set)
+        try_col(len(starting_positions_without_empty), c_starting_positions, rows_set)
  
 def handle_user_input():
     starting_positions = map(int, raw_input("Enter starting positions: ").split())
@@ -82,10 +90,18 @@ def handle_user_input():
 cdef int COUNTER = 0
 cdef int N
 
-starting_positions, rows_set, N = handle_user_input()
-cdef int[N] starting_positions2 = starting_positions
+N = get_N_from_user()
+
+cdef int *c_starting_positions
+
+starting_positions, rows_set = get_starting_positions_from_user(N)
+c_starting_positions = <int *>malloc(len(starting_positions)*cython.sizeof(int))
+for i in xrange(len(starting_positions)):
+    c_starting_positions[i] = starting_positions[i]
+
 start = time()
-backtracking(starting_positions2, rows_set)
+backtracking(c_starting_positions, starting_positions, rows_set)
 totalTime = time() - start
+free(c_starting_positions)
 print "Total number of solutions: " + str(COUNTER)
 print "Time used: " + str(totalTime)
