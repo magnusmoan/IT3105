@@ -1,7 +1,8 @@
 from copy import copy
 from time import time
 
-def diagonal_conflict(row, column, column_list):
+cdef diagonal_conflict(int row, int column, int[] column_list):
+    cdef int c_col, c_row
     for c_col, c_row in enumerate(column_list):
         if (c_row == row and c_col == column) or c_row == -1 :
             continue
@@ -37,13 +38,14 @@ def starting_positions_valid(starting_positions, n):
     return True
 
  
-def try_col(col, col_list, rows_set):
+def try_col(int col, int[] col_list, rows_set):
     if col == N:
         global COUNTER
         COUNTER += 1
         print map(lambda x: x + 1, col_list)
         return
  
+    cdef int row
     for row in rows_set:
         if not diagonal_conflict(row, col, col_list):
  
@@ -56,7 +58,7 @@ def try_col(col, col_list, rows_set):
     return
  
  
-def backtracking(starting_positions, rows_set):
+def backtracking(int[] starting_positions, rows_set):
     starting_positions_without_empty = remove_all_negative(starting_positions)
  
     if starting_positions_valid(starting_positions_without_empty, N):
@@ -77,10 +79,13 @@ def handle_user_input():
 
     return starting_positions, rows_set, n
 
-COUNTER = 0
+cdef int COUNTER = 0
+cdef int N
+
 starting_positions, rows_set, N = handle_user_input()
+cdef int[N] starting_positions2 = starting_positions
 start = time()
-backtracking(starting_positions, rows_set)
+backtracking(starting_positions2, rows_set)
 totalTime = time() - start
 print "Total number of solutions: " + str(COUNTER)
 print "Time used: " + str(totalTime)

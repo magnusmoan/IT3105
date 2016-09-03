@@ -65,12 +65,12 @@ public class Backtracking {
 
 		for(int row : rowsSet) {
 			if(!DiagonalChecker.diagonal_conflict(row, col, colList)) {
-				int[] newColList = colList;
-				newColList[col] = row;
+				colList[col] = row;
 				HashSet<Integer> newRowsSet = new HashSet<Integer>(rowsSet);
 				newRowsSet.remove(row);
 				
-				try_col(new Board(col + 1, newColList, newRowsSet));
+				try_col(new Board(col + 1, colList, newRowsSet));
+				colList[col] = -1;
 			}
 		}
 	}

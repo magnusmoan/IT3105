@@ -1,15 +1,9 @@
+import numpy as np
 from copy import copy
 from time import time
 
-def diagonal_conflict(row, column, column_list):
-    for c_col, c_row in enumerate(column_list):
-        if (c_row == row and c_col == column) or c_row == -1 :
-            continue
-
-        if abs(c_row - row) == abs(c_col - column):
-            return True
-
-    return False
+def no_diagonal_conflict(row, col, mat):
+    return ((np.sum(np.diagonal(mat, col-row))) + (np.sum(np.diagonal(np.fliplr(mat), n-col-row)))) == 0
 
 def duplicates_in_array(array):
     return len(array) != len(set(array))
@@ -37,22 +31,20 @@ def starting_positions_valid(starting_positions, n):
     return True
 
  
-def try_col(col, col_list, rows_set):
+def try_col(col, mat, rows_set):
     if col == N:
         global COUNTER
         COUNTER += 1
-        print map(lambda x: x + 1, col_list)
-        return
+        #print map(lambda x: x + 1, col_list)
  
     for row in rows_set:
-        if not diagonal_conflict(row, col, col_list):
+        if no_diagonal_conflict(row, col, mat):
  
-            col_list[col] = row
+            mat[row][col] = 1
             rows_set.remove(row)
-            try_col(col + 1, col_list, rows_set)
-            col_list[col] = -1
+            try_col(col + 1, mat, rows_set)
+            mat[row][col] = 0
             rows_set.add(row)
-
     return
  
  
@@ -61,6 +53,7 @@ def backtracking(starting_positions, rows_set):
  
     if starting_positions_valid(starting_positions_without_empty, N):
         print "Valid starting positions, starting backtracking search for feasable solution"
+        starting_positions = np.zeros((N,N))
         try_col(len(starting_positions_without_empty), starting_positions, rows_set)
  
 def handle_user_input():
@@ -79,6 +72,7 @@ def handle_user_input():
 
 COUNTER = 0
 starting_positions, rows_set, N = handle_user_input()
+n = N-1
 start = time()
 backtracking(starting_positions, rows_set)
 totalTime = time() - start
