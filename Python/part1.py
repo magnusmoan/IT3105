@@ -1,5 +1,5 @@
-from copy import copy
 from time import time
+from input_handler import get_N_from_user, get_starting_positions_from_user
 
 def diagonal_conflict(row, column, column_list):
     for c_col, c_row in enumerate(column_list):
@@ -63,24 +63,12 @@ def backtracking(starting_positions, rows_set):
         print "Valid starting positions, starting backtracking search for feasable solution"
         try_col(len(starting_positions_without_empty), starting_positions, rows_set)
  
-def handle_user_input():
-    starting_positions = map(int, raw_input("Enter starting positions: ").split())
-
-    if len(starting_positions) == 0:
-        starting_positions = [7, 5, 3, 1, 6, 8, 2, 0]
-
-    n = len(starting_positions)
-
-    starting_positions = map(lambda x: x - 1, starting_positions)
-    all_num_below_n = [i for i in range(n)]
-    rows_set = set(all_num_below_n) - set(starting_positions)
-
-    return starting_positions, rows_set, n
 
 COUNTER = 0
-starting_positions, rows_set, N = handle_user_input()
+N = get_N_from_user()
+starting_positions, rows_set = get_starting_positions_from_user(N)
 start = time()
-backtracking(starting_positions, rows_set)
+#backtracking(starting_positions, rows_set)
 totalTime = time() - start
 print "Total number of solutions: " + str(COUNTER)
 print "Time used: " + str(totalTime)
