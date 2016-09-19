@@ -22,7 +22,6 @@ def uniquefy_input(user_input):
 
     unused_numbers = list(set(all_numbers) - set(used_numbers))
     for index, element in enumerate(user_input):
-        print element
         if element in occurences and occurences[element] > 1:
             user_input[index] = unused_numbers[0]
             del unused_numbers[0]
@@ -30,11 +29,13 @@ def uniquefy_input(user_input):
 
     return tuple(user_input)
 
+
 def fitness(solution):
     conflicts = 0
     for row, col in enumerate(solution):
         conflicts += diagonal_conflict_count(row, col, solution)
     return MAX_FITNESS - conflicts
+
 
 def diagonal_conflict_count(row, col, solution):
     conflicts = 0
