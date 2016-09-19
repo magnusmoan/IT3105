@@ -23,7 +23,7 @@ def uniquefy_input(user_input):
 
 def fitness(solution, max_fitness):
     conflicts = 0
-    for row, col in enumerate(solution):
+    for col, row in enumerate(solution):
         conflicts += diagonal_conflict_count(row, col, solution)
     return max_fitness - conflicts
 
@@ -38,3 +38,12 @@ def diagonal_conflict_count(row, col, solution):
             conflicts += 1
 
     return conflicts
+
+def generate_mirror_solution(solution, n):
+    solution = list(solution)
+    mirror = [0 for _ in range(n)]
+    n -= 1
+    for index, element in enumerate(solution):
+        mirror[n-index] = element
+
+    return mirror
