@@ -26,7 +26,7 @@ def uniquefy_input(user_input, n):
 
 def fitness(solution, max_fitness):
     conflicts = 0
-    for row, col in enumerate(solution):
+    for col, row in enumerate(solution):
         conflicts += diagonal_conflict_count(row, col, solution)
     return max_fitness - conflicts
 

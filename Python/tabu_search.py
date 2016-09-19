@@ -8,7 +8,7 @@ MAX_FITNESS = (N*(N-1))/2
 SHORT_TERM_SIZE = MAX_FITNESS*2*N
 MAX_ITERATIONS = 10000
 SHORT_TERM = deque([], SHORT_TERM_SIZE)
-NUMBER_OF_SOLUTIONS = 100
+NUMBER_OF_SOLUTIONS = 5000
 SOLUTIONS = set([])
 
 
@@ -21,7 +21,6 @@ def tabu_search(solution):
 
         if curr_best_fitness == MAX_FITNESS:
             SOLUTIONS.add(solution) 
-            print solution
             mirror = generate_mirror_solution(solution, N)
             SOLUTIONS.add(mirror)
         neighborhood = generate_neighborhood(solution)
