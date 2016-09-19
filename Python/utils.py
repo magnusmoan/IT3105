@@ -21,17 +21,20 @@ def uniquefy_input(user_input):
 
     return user_input
 
-def fitness(col_list, max_fitness):
-	conflicts = 0
-	for col, row in enumerate(col_list):
-		conflicts += diagonal_conflict_count(row,col,col_list)
-	return max_fitness - conflicts
+def fitness(solution, max_fitness):
+    conflicts = 0
+    for row, col in enumerate(solution):
+        conflicts += diagonal_conflict_count(row, col, solution)
+    return max_fitness - conflicts
 
-def diagonal_conflict_count(row,column,column_list):
-	count = 0
-	for c_col, c_row, in enumerate(column_list):
-		if (c_row == row and c_col == column):
-			continue
-		if abs(c_row - row) == abs(c_col - column):
-			count+=1
-	return count
+
+def diagonal_conflict_count(row, col, solution):
+    conflicts = 0
+    for c_col, c_row in enumerate(solution[col:],col):
+        if (c_row == row and c_col == col):
+            continue
+
+        if abs(c_row - row) == abs(c_col - col):
+            conflicts += 1
+
+    return conflicts

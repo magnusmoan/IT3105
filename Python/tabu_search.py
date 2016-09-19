@@ -1,32 +1,14 @@
+from utils import fitness, diagonal_conflict_count
+
 SHORT_TERM = {}
 SOLUTIONS = []
 
-N = 4
+N = 5
 MAX_FITNESS = (N*(N-1))/2
 MAX_NUMBER_OF_ITERATIONS = 100
 
 
-
-
-def fitness(solution):
-    conflicts = 0
-    for row, col in enumerate(solution):
-        conflicts += diagonal_conflict_count(row, col, solution)
-    return MAX_FITNESS - conflicts
-
-
-def diagonal_conflict_count(row, col, solution):
-    conflicts = 0
-    for c_col, c_row in enumerate(solution[col:],col):
-        if (c_row == row and c_col == col):
-            continue
-
-        if abs(c_row - row) == abs(c_col - col):
-            conflicts += 1
-
-    return conflicts
-
-print fitness((1,0,3,2))
+print fitness((0,2,1,3,4), MAX_FITNESS)
 
 
 def tabu_search(solution):
