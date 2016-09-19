@@ -1,7 +1,7 @@
 import math
 from time import time
 from random import Random, random
-from input_handler import diagonal_conflict_count
+from utils import diagonal_conflict_count,fitness
 
 # Global parametres
 MUTATION_RATE = 0.1
@@ -59,7 +59,7 @@ def get_initial_population(user_input=None):
 		R.shuffle(col_list)
 		population.append(col_list)
 	return population
-	
+
 
 def genetic_algorithm(initial_population):
 	t = 0
@@ -84,11 +84,13 @@ def genetic_algorithm(initial_population):
 if __name__=='__main__': 
 	start_time = time()
 	initial_population = get_initial_population()
-	num_solutions, solutions = genetic_algorithm(initial_population)
+	a = (1,0,3,2)
+	print fitness(a)
+"""	num_solutions, solutions = genetic_algorithm(initial_population)
 	end_time = time()
 	
 	for i in solutions:
 		print i
 	print "Completed. Found", num_solutions,"solutions in", end_time - start_time,"seconds"
-
+"""
 	
