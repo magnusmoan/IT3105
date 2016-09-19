@@ -6,28 +6,6 @@ MAX_FITNESS = (N*(N-1))/2
 MAX_NUMBER_OF_ITERATIONS = 100
 
 
-def uniquefy_input(user_input):
-    all_numbers = [i for i in range(N)]
-    unused_numbers = []
-    used_numbers = []
-    occurences = {}
-
-    for el1 in user_input:
-        if el1 not in occurences:
-            occurences[el1] = 0
-            used_numbers.append(el1)
-            for el2 in user_input:
-                if el2 == el1:
-                    occurences[el1] += 1
-
-    unused_numbers = list(set(all_numbers) - set(used_numbers))
-    for index, element in enumerate(user_input):
-        if element in occurences and occurences[element] > 1:
-            user_input[index] = unused_numbers[0]
-            del unused_numbers[0]
-            occurences[element] -= 1
-
-    return tuple(user_input)
 
 
 def fitness(solution):
