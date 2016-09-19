@@ -3,7 +3,7 @@ from utils import *
 from input_handler import get_N_from_user, get_starting_positions_from_user
 
 N = get_N_from_user()
-#user_input = get_starting_positions_from_user(N)
+user_input = get_starting_positions_from_user(N)
 MAX_FITNESS = (N*(N-1))/2
 SHORT_TERM_SIZE = MAX_FITNESS*2*N
 MAX_ITERATIONS = 10000
