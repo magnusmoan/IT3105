@@ -28,7 +28,6 @@ def get_starting_positions_from_user(n):
 
     starting_positions = map(lambda x: x - 1, starting_positions)
 
-
     rows_set = set([i for i in range(n)]) - set(starting_positions)
 
     return starting_positions, rows_set
