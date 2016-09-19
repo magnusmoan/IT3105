@@ -28,7 +28,6 @@ SOLUTIONS = []
 N = get_N_from_user()
 starting_positions = subtract_one_from_list(get_starting_positions_from_user(N))
 rows_set = get_all_numbers_not_used(starting_positions, N)
-print starting_positions
 main(starting_positions, rows_set)
 print "Solutions: "
 for solution in SOLUTIONS:

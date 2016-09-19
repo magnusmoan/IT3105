@@ -1,5 +1,4 @@
 def is_legal_int(string):
-    print string
     try:
         i = int(string)
         return True
