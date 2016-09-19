@@ -58,6 +58,7 @@ def try_col(col, col_list, rows_set):
  
 def backtracking(starting_positions, rows_set):
     starting_positions_without_empty = remove_all_negative(starting_positions)
+    print starting_positions_without_empty
  
     if starting_positions_valid(starting_positions_without_empty, N):
         print "Valid starting positions, starting backtracking search for feasable solution"
@@ -68,7 +69,7 @@ COUNTER = 0
 N = get_N_from_user()
 starting_positions, rows_set = get_starting_positions_from_user(N)
 start = time()
-#backtracking(starting_positions, rows_set)
+backtracking(starting_positions, rows_set)
 totalTime = time() - start
 print "Total number of solutions: " + str(COUNTER)
 print "Time used: " + str(totalTime)
