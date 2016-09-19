@@ -32,15 +32,3 @@ def get_starting_positions_from_user(n):
 
     return starting_positions, rows_set
 
-def diagonal_conflict(row,column,column_list):
-	for c_col, c_row in enumerate(column_list):
-		if (c_row == row and c_col == column) or c_row == -1:
-			continue
-		if abs(c_row - row) == abs(c_col - column):
-			return True
-	return False
-
-
-def duplicates_in_array_count(array):
-	return abs (len(array) - len(set(array)))
-

@@ -1,5 +1,5 @@
-def uniquefy_input(user_input):
-    all_numbers = [i for i in range(N)]
+def uniquefy_input(user_input, n):
+    all_numbers = [i for i in range(n)]
     unused_numbers = []
     used_numbers = []
     occurences = {}
@@ -46,4 +46,4 @@ def generate_mirror_solution(solution, n):
     for index, element in enumerate(solution):
         mirror[n-index] = element
 
-    return mirror
+    return tuple(mirror)

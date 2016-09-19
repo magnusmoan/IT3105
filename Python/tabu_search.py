@@ -1,24 +1,41 @@
-from utils import fitness, diagonal_conflict_count
+from collections import deque
+from utils import *
+from input_handler import get_N_from_user, get_starting_positions_from_user
 
-SHORT_TERM = {}
-SOLUTIONS = []
-
-N = 5
+N = get_N_from_user()
+user_input = get_starting_positions_from_user(N)
 MAX_FITNESS = (N*(N-1))/2
-MAX_NUMBER_OF_ITERATIONS = 100
-
-
-print fitness((0,2,1,3,4), MAX_FITNESS)
+SHORT_TERM_SIZE = MAX_FITNESS*30
+MAX_ITERATIONS = 10000
+SHORT_TERM = deque([], SHORT_TERM_SIZE)
+NUMBER_OF_SOLUTIONS = 724
+SOLUTIONS = set([])
 
 
 def tabu_search(solution):
-    if fitness(solution) == MAX_FITNESS:
-        SOLUTIONS.append(solution)
-        SHORT_TERM[solution] = MAX_FITNESS
-
+    curr_best_fitness = fitness(solution, MAX_FITNESS)
     for _ in range(MAX_ITERATIONS):
+
+        if len(SOLUTIONS) == NUMBER_OF_SOLUTIONS:
+            return
+
+        if curr_best_fitness == MAX_FITNESS:
+            SOLUTIONS.add(solution) 
+            mirror = generate_mirror_solution(solution, N)
+            SOLUTIONS.add(mirror)
         neighborhood = generate_neighborhood(solution)
 
+        curr_best_fitness = 0
+        for neighbor in neighborhood:
+            if neighbor in SHORT_TERM or neighbor in SOLUTIONS:
+                continue
+            
+            SHORT_TERM.append(neighbor)
+            curr_fitness = fitness(neighbor, MAX_FITNESS)
+
+            if curr_fitness > curr_best_fitness:
+                curr_best_fitness = curr_fitness
+                solution = neighbor
 
 def generate_neighborhood(solution):
     neighborhood = []
@@ -31,5 +48,7 @@ def generate_neighborhood(solution):
 
 
 
-
+tabu_search(uniquefy_input(user_input), N)
+print SOLUTIONS
+print len(SOLUTIONS)
 
