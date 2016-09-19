@@ -1,9 +1,8 @@
 def is_legal_int(string):
+    print string
     try:
         i = int(string)
-        if i >= 4:
-            return True
-        return False
+        return True
     except:
         return False
 
@@ -16,19 +15,27 @@ def get_N_from_user():
         print "The provided value for n isn't an legal integer. Please enter another value."
         return get_N_from_user()
 
+# Returns a list given from the user. Will fill the list with 1's of the number of 
+# elements given by the user is less than n. 
 def get_starting_positions_from_user(n):
-    starting_positions = map(int, raw_input("Enter starting positions: ").split())
+    try:
+        starting_positions = map(int, raw_input("Enter starting positions: ").split())
+    except ValueError:
+        print "One or more of the provided values was not an integer"
+        get_starting_positions_from_user(n)
 
     if len(starting_positions) > n:
-        print "Cannot provide more starting positions than the value of n. Please enter new starting positions"
+        print "Cannot provide more starting positions than the value of n."
         get_starting_positions_from_user(n)
-    elif len(starting_positions) < n:
+
+    for element in starting_positions:
+        if int(element) < 1 or int(element) > n:
+            print str(element) + " is not within the valid range (1-" + str(n) + ")"
+            get_starting_positions_from_user(n)
+
+    if len(starting_positions) < n:
         for _ in range(len(starting_positions), n):
-            starting_positions.append(0)
+            starting_positions.append(1)
 
-    starting_positions = map(lambda x: x - 1, starting_positions)
-
-    rows_set = set([i for i in range(n)]) - set(starting_positions)
-
-    return starting_positions, rows_set
+    return starting_positions
 

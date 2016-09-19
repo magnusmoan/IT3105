@@ -5,7 +5,7 @@ from input_handler import get_N_from_user, get_starting_positions_from_user
 N = get_N_from_user()
 user_input = get_starting_positions_from_user(N)
 MAX_FITNESS = (N*(N-1))/2
-SHORT_TERM_SIZE = MAX_FITNESS*30
+SHORT_TERM_SIZE = MAX_FITNESS*2*N
 MAX_ITERATIONS = 10000
 SHORT_TERM = deque([], SHORT_TERM_SIZE)
 NUMBER_OF_SOLUTIONS = 724
@@ -48,7 +48,8 @@ def generate_neighborhood(solution):
 
 
 
-tabu_search(uniquefy_input(user_input), N)
-print SOLUTIONS
-print len(SOLUTIONS)
+tabu_search(tuple(uniquefy_input(subtract_one_from_list(user_input), N)))
+for solution in SOLUTIONS:
+    print solution
+print "Number of solutions: " + str(len(SOLUTIONS))
 

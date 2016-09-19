@@ -1,3 +1,6 @@
+# Takes as input a list/tuple and an integer n (length of list/tuple)
+# Returns a list where all duplicates have been exchanged for unused numbers in the
+# range 0 to n
 def uniquefy_input(user_input, n):
     all_numbers = [i for i in range(n)]
     unused_numbers = []
@@ -27,6 +30,15 @@ def fitness(solution, max_fitness):
         conflicts += diagonal_conflict_count(row, col, solution)
     return max_fitness - conflicts
 
+def is_diagonal_conflict(row, col, col_list):
+    for c_col, c_row in enumerate(col_list):
+        if (c_row == row and c_col == col) or c_row == -1 :
+            continue
+
+        if abs(c_row - row) == abs(c_col - col):
+            return True
+
+    return False
 
 def diagonal_conflict_count(row, col, solution):
     conflicts = 0
@@ -39,6 +51,8 @@ def diagonal_conflict_count(row, col, solution):
 
     return conflicts
 
+# Takes a list/tuple representing an n-queens solution as input and mirrors the solution
+# to create a new solution.
 def generate_mirror_solution(solution, n):
     solution = list(solution)
     mirror = [0 for _ in range(n)]
@@ -47,3 +61,38 @@ def generate_mirror_solution(solution, n):
         mirror[n-index] = element
 
     return tuple(mirror)
+
+# Subtracts 1 from all numbers in a list and returns the modified list
+def subtract_one_from_list(a):
+    return map(lambda x: x - 1, a)
+
+# Returns a list of all numbers in the range 0 to n that does not occur in a
+def get_all_numbers_not_used(a, n):
+    rows_set = set([i for i in range(n)]) - set(a)
+    return rows_set
+
+# Checks if there exists duplicates in a given array
+def duplicates_in_array(array):
+    return len(array) != len(set(array))
+
+# Removes all negative numbers from an array
+def remove_all_negative(array_with_zeros):
+    non_zero_array = []
+    for number in array_with_zeros:
+        if number >= 0:
+            non_zero_array.append(number)
+
+    return non_zero_array
+
+# Checks if a given starting position is valid
+def starting_positions_valid(starting_positions, n):
+    if duplicates_in_array(starting_positions):
+        print "Duplicates"
+        return False
+
+    for col, row in enumerate(starting_positions):
+        if is_diagonal_conflict(row, col, starting_positions):
+            print "Diagonal conflict"
+            return False
+
+    return True
