@@ -37,14 +37,6 @@ def tabu_search(solution):
                 curr_best_fitness = curr_fitness
                 solution = neighbor
 
-def generate_neighborhood(solution):
-    neighborhood = []
-
-    for index1, element1 in enumerate(solution):
-        for index2, element2 in enumerate(solution[index1+1:], index1+1):
-            neighbor = solution[:index1] + (element2,) + solution[index1+1:index2] + (element1,) + solution[index2+1:]
-            neighborhood.append(neighbor)
-    return neighborhood
 
 start = time()
 tabu_search(tuple(uniquefy_input(subtract_one_from_list(user_input), N)))
