@@ -15,6 +15,7 @@ R = Random()
 
 def swap_attacked_queen(col_list):
 	attacked_queen_index = []
+        y = col_list[:]
 	for c,r in enumerate(col_list):
 		if not no_diagonal_conflict(r,c,col_list): attacked_queen_index.append(c)
 	if len(attacked_queen_index) == 0: return col_list

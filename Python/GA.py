@@ -1,7 +1,7 @@
 import math
 from time import time
 from random import Random, random
-from utils import diagonal_conflict_count,fitness,generate_mirror_solution,generate_neighborhood, uniquefy_input
+from utils import diagonal_conflict_count,fitness,generate_mirror_solution,generate_neighborhood, uniquefy_input, rotate_right
 from input_handler import get_N_from_user, starting_positions_heuristic_algorithms
 from output_handler import show_solutions
 
@@ -76,15 +76,25 @@ def genetic_algorithm(initial_population):
 			z = crossover(x,y)
 			z = mutation(z)
 			if fitness(z,MAX_FITNESS) == MAX_FITNESS: 
+                                if (len(SOLUTIONS) == 0): STEP_BY_STEP.append(z)
 				SOLUTIONS.add(z)
-				SOLUTIONS.add(generate_mirror_solution(z,N))
+                                mirror = generate_mirror_solution(z,N)
+				SOLUTIONS.add(mirror)
+                                z_rotated = rotate_right(z,N)
+                                mirror_rotated = rotate_right(mirror,N)
+
+                                if fitness(z_rotated,MAX_FITNESS) ==  MAX_FITNESS:
+                                    SOLUTIONS.add(z_rotated)
+                                if fitness(mirror_rotated,MAX_FITNESS) == MAX_FITNESS:
+                                    SOLUTIONS.add(mirror_rotated)
+
 			elif (z not in next_population and z not in SOLUTIONS): 
 				next_population.append(z)
 
 start = time()
 initial_population = generate_initial_population(user_input)
 genetic_algorithm(initial_population)	
-show_solutions(STEP_BY_STEP,SOLUTIONS,time() - start)
+show_solutions(STEP_BY_STEP,SOLUTIONS,time() - start,N,False)
 
 """
 def get_initial_population(user_input=None):

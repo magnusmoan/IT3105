@@ -60,6 +60,13 @@ def generate_mirror_solution(solution, n):
 
     return tuple(mirror)
 
+def rotate_right(solution, n):
+    n -= 1
+    rotated = list(solution)
+    for col, row in enumerate(solution):
+        rotated[n - row] = col
+    return tuple(rotated)
+
 # Subtracts 1 from all numbers in a list and returns the modified list
 def subtract_one_from_list(a):
     return map(lambda x: x - 1, a)
