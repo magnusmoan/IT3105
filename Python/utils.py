@@ -30,15 +30,13 @@ def fitness(solution, max_fitness):
         conflicts += diagonal_conflict_count(row, col, solution)
     return max_fitness - conflicts
 
-def is_diagonal_conflict(row, col, col_list):
+def no_diagonal_conflict(row, col, col_list):
+    foo1 = row + col
+    foo2 = col - row
     for c_col, c_row in enumerate(col_list):
-        if (c_row == row and c_col == col) or c_row == -1 :
-            continue
-
-        if abs(c_row - row) == abs(c_col - col):
-            return True
-
-    return False
+        if c_col + c_row == foo1 or c_col - c_row == foo2:
+            return False
+    return True
 
 def diagonal_conflict_count(row, col, solution):
     conflicts = 0
@@ -84,7 +82,7 @@ def remove_all_negative(array_with_zeros):
 
     return non_zero_array
 
-# Checks if a given starting position is valid
+# Checks if a given starting position is valid for backtracking
 def starting_positions_valid(starting_positions, n):
     if duplicates_in_array(starting_positions):
         print "Duplicates"
