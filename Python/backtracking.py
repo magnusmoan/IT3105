@@ -1,11 +1,19 @@
 from time import time
 from input_handler import *
+from output_handler import show_solutions
 from utils import *
 
+N = get_N_from_user()
+SOLUTIONS = []
+STEP_BY_STEP = []
+
 def backtracking(col, col_list, rows_set):
+
+    if len(SOLUTIONS) == 0:
+        STEP_BY_STEP.append(col_list[:])
+
     if col == N:
         SOLUTIONS.append(col_list[:])
-        #SOLUTIONS.append(map(lambda x: x + 1, col_list))
         return
  
     for row in rows_set:
@@ -23,13 +31,7 @@ def main(starting_positions):
         print "Valid starting positions, starting backtracking search for feasable solution"
         backtracking(len(starting_positions), starting_positions, rows_set)
 
-SOLUTIONS = []
-N = get_N_from_user()
 starting_positions = subtract_one_from_list(starting_positions_backtracking_algorithm(N))
 start = time()
 main(starting_positions)
-print "Solutions: "
-for solution in SOLUTIONS:
-    print solution
-print "Total number of solutions: " + str(len(SOLUTIONS))
-print "Time used: " + str(time() - start)
+show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start)

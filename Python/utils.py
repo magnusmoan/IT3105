@@ -64,6 +64,10 @@ def generate_mirror_solution(solution, n):
 def subtract_one_from_list(a):
     return map(lambda x: x - 1, a)
 
+# Adds 1 to all numbers in the given list and returns the new list
+def add_one_to_list(a):
+    return map(lambda x: x + 1, a)
+
 # Returns a list of all numbers in the range 0 to n that does not occur in a
 def get_all_numbers_not_used(a, n):
     rows_set = set([i for i in range(n)]) - set(a)
