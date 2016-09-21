@@ -92,10 +92,10 @@ def starting_positions_valid(starting_positions, n):
         print "Duplicates"
         return False
 
-    #for col, row in enumerate(starting_positions):
-    #    if not no_diagonal_conflict(row, col, starting_positions):
-    #        print "Diagonal conflict"
-    #        return False
+    for col, row in enumerate(starting_positions):
+        if not no_diagonal_conflict(row, col, starting_positions):
+            print "Diagonal conflict"
+            return False
 
     return True
 
