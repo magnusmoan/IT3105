@@ -40,7 +40,7 @@ def simmulated_annealing(pop):
 		y = swap_attacked_queen(x)
 		fit_x,fit_y = fitness(x,MAX_FIT), fitness(y,MAX_FIT)
 		prob = math.exp(-(fit_y-fit_x)/t)
-		if fit_y >= fit_x or p > R.random():
+		if fit_y >= fit_x or prob > R.random():
 			x = y
 			if fitness(x,MAX_FIT) == MAX_FIT: 
 				SOLUTIONS.add(tuple(x))
