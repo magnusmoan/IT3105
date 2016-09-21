@@ -11,30 +11,35 @@ SHORT_TERM_SIZE = N*10
 SHORT_TERM = deque([], SHORT_TERM_SIZE)
 SOLUTIONS = set([])
 STEP_BY_STEP = []
-NUMBER_OF_SOLUTIONS = float("inf")
+
+# Max number of iterations
 MAX_ITERATIONS = 1000
+
+# Maximum number of iterations without improvement before we allow a tabu solution
 MAX_ITERATIONS_WITHOUT_IMPROVEMENT = 5
 
 
 
-def tabu_search(curr_solution):
+def tabu_search(curr_board):
     max_iterations_left = MAX_ITERATIONS_WITHOUT_IMPROVEMENT
-    curr_best_fitness = fitness(curr_solution, MAX_FITNESS)
+    curr_best_fitness = fitness(curr_board, MAX_FITNESS)
     for iteration in xrange(MAX_ITERATIONS):
         print "Starting iteration number: " + str(iteration)
+
+        # If we are searching for the first solution we add each step to the step by step list
         if len(SOLUTIONS) == 0:
-            STEP_BY_STEP.append(curr_solution)
-        SHORT_TERM.append(curr_solution)
+            STEP_BY_STEP.append(curr_board)
+        SHORT_TERM.append(curr_board)
 
-        if len(SOLUTIONS) == NUMBER_OF_SOLUTIONS:
-            return
-
+        # If the current board is a solution, we add it to the solution set
         if curr_best_fitness == MAX_FITNESS:
-            SOLUTIONS.add(curr_solution) 
-            mirror = generate_mirror_solution(curr_solution, N)
+            SOLUTIONS.add(curr_board) 
+            mirror = generate_mirror_solution(curr_board, N)
             SOLUTIONS.add(mirror)
             curr_best_fitness = 0
-        neighborhood = generate_neighborhood(curr_solution)
+
+        # Find all neighbors. A neighbor is a board were one queen swap is made
+        neighborhood = generate_neighborhood(curr_board)
 
         best_neighbor_fitness = 0
         for _,neighbor in enumerate(neighborhood):
@@ -46,16 +51,19 @@ def tabu_search(curr_solution):
                 best_neighbor_fitness = curr_fitness
                 best_neighbor = neighbor
 
+        # Check if the current best neighbor is better than the current solution
         if best_neighbor_fitness < curr_best_fitness:
+
+            # Checks if the maximum number of iterations without improvement is reached. If so pick a tabu board
             if max_iterations_left == 0:
-                curr_solution = SHORT_TERM.popleft() 
-                curr_best_fitness = fitness(curr_solution, MAX_FITNESS)
+                curr_board = SHORT_TERM.popleft() 
+                curr_best_fitness = fitness(curr_board, MAX_FITNESS)
                 max_iterations_left = MAX_ITERATIONS_WITHOUT_IMPROVEMENT
             else:
                 max_iterations_left -= 1
         else:
             curr_best_fitness = best_neighbor_fitness
-            curr_solution = best_neighbor
+            curr_board = best_neighbor
 
 
 
