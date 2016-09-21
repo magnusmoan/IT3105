@@ -13,7 +13,7 @@ SOLUTIONS = set([])
 STEP_BY_STEP = []
 
 # Max number of iterations
-MAX_ITERATIONS = 1000
+MAX_ITERATIONS = 2000
 
 # Maximum number of iterations without improvement before we allow a tabu solution
 MAX_ITERATIONS_WITHOUT_IMPROVEMENT = 5
