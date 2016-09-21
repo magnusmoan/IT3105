@@ -1,38 +1,34 @@
 import math
 from time import time
 from random import Random, random
-from utils import diagonal_conflict_count,fitness
+from utils import diagonal_conflict_count,fitness,generate_mirror_solution
+from input_handler import get_N_from_user, get_starting_positions_from_user
 
-# Global parametres
-MUTATION_RATE = 0.1
+N = get_N_from_user()
+#user_input = get_starting_positions_from_user(N)
+MUTATION_RATE = 0.05
 POP_SIZE = 1000
-SEL_RATE = 0.5
-N = 10
+SEL_RATE = 100
 MAX_FITNESS = N*(N-1)/2
 MAX_ITER = 100
 R = Random()
-
-def fitness(col_list):
-	conflicts = 0
-	for col, row in enumerate(col_list):
-		conflicts += diagonal_conflict_count(row,col,col_list)
-	return MAX_FITNESS - conflicts
+SOLUTIONS = set([])
 
 def selection(pop):
-	next_pop = [(fitness(pop[i]),pop[i]) for i in range(len(pop))]
+	next_pop = [(fitness(pop[i],MAX_FITNESS),pop[i]) for i in range(len(pop))]
 	next_pop_sorted = sorted(next_pop,key=lambda x:x[0],reverse=True)
 	next_pop_sorted_list = [elem[1] for elem in next_pop_sorted]
-	return next_pop_sorted_list
+	return next_pop_sorted_list[:SEL_RATE]
 
 def mutation(col_list):
 	r = R.random()
 	if r < MUTATION_RATE:
 	    i,j = R.randint(0,N-1), R.randint(0,N-1)
 	    col_list[i], col_list[j] = col_list[j], col_list[i]
-	return col_list
+	return tuple(col_list)
 
 def crossover(p1,p2): 
-	swath = R.randint(2,math.floor(N/2))
+	swath = R.randint(1,math.floor(N/2))
 	i = R.randint(0,N - swath)
 	s = range(i,i+swath)
 	child = []
@@ -63,34 +59,28 @@ def get_initial_population(user_input=None):
 
 def genetic_algorithm(initial_population):
 	t = 0
-	solutions = set([])
 	next_population = initial_population
 	while (t < MAX_ITER):
-		print "New generation",t
-		population = selection(next_population)[:int(POP_SIZE*SEL_RATE)]
+		print "New generation",t,". Size of pop:",len(next_population)
+		population = selection(next_population)
 		next_population = []
+		n = len(population) - 1
 		for i in range(POP_SIZE):
-			x = population[R.randint(0,len(population)-1)]
-			y = population[R.randint(0,len(population)-1)]
+			x = population[R.randint(0,n)]
+			y = population[R.randint(0,n)]
 			z = crossover(x,y)
 			z = mutation(z)
-			if fitness(z) == MAX_FITNESS: 
-				print "Found solution"
-				solutions.add(tuple(z))
-			next_population.append(z)
+			if fitness(z,MAX_FITNESS) == MAX_FITNESS: 
+				SOLUTIONS.add(z)
+				SOLUTIONS.add(generate_mirror_solution(z,N))
+			elif (z not in next_population and z not in SOLUTIONS): next_population.append(z)
 		t += 1
-	return [len(solutions),solutions]
 
 if __name__=='__main__': 
 	start_time = time()
 	initial_population = get_initial_population()
-	a = (1,0,3,2)
-	print fitness(a)
-"""	num_solutions, solutions = genetic_algorithm(initial_population)
+	genetic_algorithm(initial_population)
 	end_time = time()
 	
-	for i in solutions:
-		print i
-	print "Completed. Found", num_solutions,"solutions in", end_time - start_time,"seconds"
-"""
+	print "Completed. Found",len(SOLUTIONS),"solutions in", end_time - start_time,"seconds"
 	
