@@ -6,16 +6,17 @@ from input_handler import get_N_from_user, get_starting_positions_from_user
 N = get_N_from_user()
 user_input = get_starting_positions_from_user(N)
 MAX_FITNESS = (N*(N-1))/2
-SHORT_TERM_SIZE = MAX_FITNESS*2*N
-MAX_ITERATIONS = 10000
+SHORT_TERM_SIZE = N
 SHORT_TERM = deque([], SHORT_TERM_SIZE)
-NUMBER_OF_SOLUTIONS = 5000
 SOLUTIONS = set([])
+NUMBER_OF_SOLUTIONS = 50
+MAX_ITERATIONS = 1000
 
 
 def tabu_search(solution):
     curr_best_fitness = fitness(solution, MAX_FITNESS)
     for _ in xrange(MAX_ITERATIONS):
+        SHORT_TERM.append(solution)
 
         if len(SOLUTIONS) == NUMBER_OF_SOLUTIONS:
             return
@@ -31,9 +32,7 @@ def tabu_search(solution):
             if neighbor in SHORT_TERM or neighbor in SOLUTIONS:
                 continue
             
-            SHORT_TERM.append(neighbor)
             curr_fitness = fitness(neighbor, MAX_FITNESS)
-
             if curr_fitness > curr_best_fitness:
                 curr_best_fitness = curr_fitness
                 solution = neighbor

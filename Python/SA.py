@@ -1,7 +1,7 @@
 import math
 from time import time
 from random import Random, random
-from utils import is_diagonal_conflict, diagonal_conflict_count,fitness,generate_mirror_solution
+from utils import no_diagonal_conflict, diagonal_conflict_count,fitness,generate_mirror_solution
 from input_handler import get_N_from_user, get_starting_positions_from_user
 
 N = get_N_from_user()
@@ -16,7 +16,7 @@ R = Random()
 def swap_attacked_queen(col_list):
 	attacked_queen_index = []
 	for c,r in enumerate(col_list):
-		if is_diagonal_conflict(r,c,col_list): attacked_queen_index.append(c)
+		if not no_diagonal_conflict(r,c,col_list): attacked_queen_index.append(c)
 	if len(attacked_queen_index) == 0: return col_list
 	i1,i2 = R.randint(0,len(attacked_queen_index)-1),R.randint(0,N-1)
 	while (i1 == i2): i2 = R.randint(0,N-1)
