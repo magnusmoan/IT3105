@@ -20,7 +20,6 @@ cdef try_col(int col, col_list, rows_set, int n):
             rows_set.add(row)
     return
  
- 
 cdef backtracking(starting_positions, rows_set, int n):
     valid_start, number_of_placed_queens = starting_positions_valid(starting_positions, n)
     if valid_start:

@@ -1,0 +1,11 @@
+\contentsline {section}{\numberline {1}Part 1}{2}
+\contentsline {subsection}{\numberline {1.1}Board representation}{2}
+\contentsline {subsection}{\numberline {1.2}Heuristic function}{2}
+\contentsline {section}{\numberline {2}Part 2}{2}
+\contentsline {subsection}{\numberline {2.1}Solutions}{2}
+\contentsline {section}{\numberline {3}Part 3}{2}
+\contentsline {subsection}{\numberline {3.1}Solutions}{2}
+\contentsline {subsection}{\numberline {3.2}Tabu Search}{2}
+\contentsline {subsection}{\numberline {3.3}Simulated Annealing}{2}
+\contentsline {subsection}{\numberline {3.4}Genetic Algorithm}{2}
+\contentsline {subsection}{\numberline {3.5}Comparison}{2}
