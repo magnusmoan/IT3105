@@ -56,6 +56,15 @@ def get_initial_population(user_input=None):
 		population.append(col_list)
 	return population
 
+def generate_initial_population(user_input):
+	population = set([])
+	x = user_input
+	while (len(population) < POP_SIZE):
+		neighbors = get_neighbors(x)
+		for e in neighbors:
+			population.add(e)
+		x = neighbors[0]
+	return population	
 
 def genetic_algorithm(initial_population):
 	t = 0
@@ -71,6 +80,9 @@ def genetic_algorithm(initial_population):
 			z = crossover(x,y)
 			z = mutation(z)
 			if fitness(z,MAX_FITNESS) == MAX_FITNESS: 
+				print "Found solution"
+				print z
+				return
 				SOLUTIONS.add(z)
 				SOLUTIONS.add(generate_mirror_solution(z,N))
 			elif (z not in next_population and z not in SOLUTIONS): next_population.append(z)
