@@ -43,9 +43,9 @@ def starting_positions_heuristic_algorithms(n):
         starting_positions = get_starting_positions_from_user(n)
     if len(starting_positions) < n:
         for _ in range(len(starting_positions), n):
-            valid_starting_positions.append(1)
+            starting_positions.append(1)
 
-    return valid_starting_positions
+    return starting_positions
 
 def starting_positions_backtracking_algorithm(n):
     starting_positions = get_starting_positions_from_user(n)
