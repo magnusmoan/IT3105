@@ -1,7 +1,7 @@
 from time import time
-from input_handler import *
+from input_handler import starting_positions_backtracking_algorithm, get_N_from_user
 from output_handler import show_solutions
-from utils import *
+from utils import no_diagonal_conflict, get_all_numbers_not_used, subtract_one_from_list, starting_positions_valid
 
 N = get_N_from_user()
 SOLUTIONS = []
@@ -9,8 +9,7 @@ STEP_BY_STEP = []
 
 def backtracking(col, col_list, rows_set):
 
-    if len(SOLUTIONS) == 0:
-        STEP_BY_STEP.append(col_list[:])
+    (len(SOLUTIONS) == 0) and STEP_BY_STEP.append(col_list[:])
 
     if col == N:
         SOLUTIONS.append(col_list[:])
@@ -34,4 +33,4 @@ def main(starting_positions):
 starting_positions = subtract_one_from_list(starting_positions_backtracking_algorithm(N))
 start = time()
 main(starting_positions)
-show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start)
+show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start, N, True)
