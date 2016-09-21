@@ -94,3 +94,11 @@ def starting_positions_valid(starting_positions, n):
     #        return False
 
     return True
+
+def generate_neighborhood(solution):
+    neighborhood = []
+    for index1, element1 in enumerate(solution):
+        for index2, element2 in enumerate(solution[index1+1:], index1+1):
+            neighbor = solution[:index1] + (element2,) + solution[index1+1:index2] + (element1,) + solution[index2+1:]
+            neighborhood.append(neighbor)
+    return neighborhood
