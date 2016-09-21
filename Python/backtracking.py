@@ -25,7 +25,7 @@ def main(starting_positions):
 
 SOLUTIONS = []
 N = get_N_from_user()
-starting_positions = subtract_one_from_list(get_from_user(N))
+starting_positions = subtract_one_from_list(starting_positions_backtracking_algorithm(N))
 start = time()
 main(starting_positions)
 print "Solutions: "
