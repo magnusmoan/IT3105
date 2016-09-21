@@ -24,8 +24,21 @@ def list_elements_in_range(li, minimum, maximum):
 
 # Returns a list given from the user. Will fill the list with 1's of the number of 
 # elements given by the user is less than n. 
+def get_starting_positions_from_user(n):
+    try:
+        starting_positions = map(int, raw_input("Enter starting positions: ").split())
+    except ValueError:
+        print "One or more of the provided values was not an integer"
+        return get_starting_positions_from_user(n)
+
+    if len(starting_positions) > n:
+        print "Cannot provide more starting positions than the value of n."
+        return get_starting_positions_from_user(n)
+
+    return starting_positions
+
 def starting_positions_heuristic_algorithms(n):
-    starting_positions = get_starting_position_from_user(n)
+    starting_positions = get_starting_positionx_from_user(n)
     while not list_elements_in_range(starting_positions, 1 ,n):
         starting_positions = get_starting_positions_from_user(n)
     if len(starting_positions) < n:
@@ -45,16 +58,4 @@ def starting_positions_backtracking_algorithm(n):
 
     return starting_positions
 
-def get_starting_position_from_user(n):
-    try:
-        starting_positions = map(int, raw_input("Enter starting positions: ").split())
-    except ValueError:
-        print "One or more of the provided values was not an integer"
-        return get_from_user(n)
-
-    if len(starting_positions) > n:
-        print "Cannot provide more starting positions than the value of n."
-        return get_from_user(n)
-
-    return starting_positions
 
