@@ -10,13 +10,47 @@
 \maketitle
 \tableofcontents
 
+% Part 1
 \section{Part 1}
 \subsection{Board representation}
+We chose to represent our board in a one-dimensional array of size $n$, where each index represents a column and each number represents a row in the board. We chose this representation because it would (1) allow us to store and manipulate data in an efficient way with respect to time and space constraints and (2) easily guarantee absence of conflicts in both rows and columns.
+
 \subsection{Heuristic function}
 
+
+% Part 2
 \section{Part 2}
 \subsection{Solutions}
 
+\begin{table}[!htb]
+	\begin{minipage}{.5\linewidth}
+	      	\centering
+		\begin{tabular}{ll}
+		\textbf{N}               & \multicolumn{1}{c}{\textbf{Number of solutions}} \\ 
+		                         & \multicolumn{1}{c}{\textit{For fixed input: 1 3 5 7}}    \\ \hline
+		\multicolumn{1}{|l|}{14} & \multicolumn{1}{l|}{}                            \\ \hline
+		\multicolumn{1}{|l|}{16} & \multicolumn{1}{l|}{}                            \\ \hline
+		\multicolumn{1}{|l|}{18} & \multicolumn{1}{l|}{}                            \\ \hline
+		\multicolumn{1}{|l|}{20} & \multicolumn{1}{l|}{}                            \\ \hline
+		\end{tabular}
+    	\end{minipage}%
+	\begin{minipage}{.5\linewidth}
+	      	\centering
+		\begin{tabular}{ll}
+		\textbf{N}               & \multicolumn{1}{c}{\textbf{Time taken}} \\
+	                         & \multicolumn{1}{c}{\textit{For finding all solutions}}    \\ \hline
+		\multicolumn{1}{|l|}{14} & \multicolumn{1}{l|}{}                            \\ \hline
+		\multicolumn{1}{|l|}{16} & \multicolumn{1}{l|}{}                            \\ \hline
+		\multicolumn{1}{|l|}{18} & \multicolumn{1}{l|}{}                            \\ \hline
+		\multicolumn{1}{|l|}{20} & \multicolumn{1}{l|}{}                            \\ \hline
+		\end{tabular}
+    	\end{minipage}%
+	\caption{Results}
+\end{table}	
+
+
+
+% Part 3
 \section{Part 3}
 \subsection{Solutions}
 \subsection{Tabu Search}
