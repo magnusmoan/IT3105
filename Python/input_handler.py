@@ -38,7 +38,7 @@ def get_starting_positions_from_user(n):
     return starting_positions
 
 def starting_positions_heuristic_algorithms(n):
-    starting_positions = get_starting_positionx_from_user(n)
+    starting_positions = get_starting_positions_from_user(n)
     while not list_elements_in_range(starting_positions, 1 ,n):
         starting_positions = get_starting_positions_from_user(n)
     if len(starting_positions) < n:
