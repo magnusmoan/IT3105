@@ -5,7 +5,7 @@ def show_solutions(step_by_step, solutions, time_used, n, backtracking):
     print "Time used: " + str(time_used)
     show_step_by_step = raw_input("\nDo you want to see step by step for the first solution? (YES/NO): ").lower()
     
-    if show_step_by_step == "yes":
+    if show_step_by_step == "yes" or show_step_by_step == "y":
         if backtracking:
             print_step_by_step_backtracking(step_by_step, n)
         else:
@@ -13,7 +13,7 @@ def show_solutions(step_by_step, solutions, time_used, n, backtracking):
     
     show_all_solutions = raw_input("\nDo you want to see all solutions? (YES/NO): ").lower()
     
-    if show_all_solutions == "yes":
+    if show_all_solutions == "yes" or show_step_by_step == "y":
         for solution in solutions:
             print format_solution(solution)
 

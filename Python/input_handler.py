@@ -14,6 +14,9 @@ def get_N_from_user():
         print "The provided value for n isn't an legal integer. Please enter another value."
         return get_N_from_user()
 
+def ask_user_for_mirroring_and_rotation():
+    return "yes" == raw_input("Would you like to allow mirroring and rotation of solutions? (YES/NO): ").lower()
+
 # Detects wether or not the elements of a list is within the valid range
 def list_elements_in_range(li, minimum, maximum):
     for element in li:
@@ -58,4 +61,8 @@ def starting_positions_backtracking_algorithm(n):
 
     return starting_positions
 
-
+def setup_heuristic_algorithm():
+    n = get_N_from_user()
+    user_input = starting_positions_heuristic_algorithms(n)
+    rotation_and_mirroring_legal = ask_user_for_mirroring_and_rotation()
+    return n, user_input, rotation_and_mirroring_legal

@@ -2,10 +2,9 @@ from time import time
 from collections import deque
 from utils import fitness, generate_mirror_solution, generate_neighborhood, subtract_one_from_list, uniquefy_input, rotate_right
 from output_handler import show_solutions
-from input_handler import get_N_from_user, starting_positions_heuristic_algorithms
+from input_handler import setup_heuristic_algorithm
 
-N = get_N_from_user()
-user_input = starting_positions_heuristic_algorithms(N)
+N, user_input, ROTATION_AND_MIRRORING_LEGAL = setup_heuristic_algorithm()
 MAX_FITNESS = (N*(N-1))/2
 SHORT_TERM_SIZE = N*10
 SHORT_TERM = deque([], SHORT_TERM_SIZE)
@@ -13,7 +12,7 @@ SOLUTIONS = set([])
 STEP_BY_STEP = []
 
 # Max number of iterations
-MAX_ITERATIONS = 1500
+MAX_ITERATIONS = 500
 
 # Maximum number of iterations without improvement before we allow a tabu solution
 MAX_ITERATIONS_WITHOUT_IMPROVEMENT = 5
@@ -34,14 +33,15 @@ def tabu_search(curr_board):
         # If the current board is a solution, we add it to the solution set
         if curr_best_fitness == MAX_FITNESS:
             SOLUTIONS.add(curr_board) 
-            mirror = generate_mirror_solution(curr_board, N)
-            curr_board_rotated = rotate_right(curr_board, N)
-            mirror_rotated = rotate_right(mirror, N)
-            if fitness(curr_board_rotated, MAX_FITNESS) == MAX_FITNESS:
-                SOLUTIONS.add(curr_board_rotated)
-            if fitness(mirror_rotated, MAX_FITNESS) == MAX_FITNESS:
-                SOLUTIONS.add(mirror_rotated)
-            SOLUTIONS.add(mirror)
+            if ROTATION_AND_MIRRORING_LEGAL:
+                mirror = generate_mirror_solution(curr_board, N)
+                curr_board_rotated = rotate_right(curr_board, N)
+                mirror_rotated = rotate_right(mirror, N)
+                if fitness(curr_board_rotated, MAX_FITNESS) == MAX_FITNESS:
+                    SOLUTIONS.add(curr_board_rotated)
+                if fitness(mirror_rotated, MAX_FITNESS) == MAX_FITNESS:
+                    SOLUTIONS.add(mirror_rotated)
+                SOLUTIONS.add(mirror)
             curr_best_fitness = 0
 
         # Find all neighbors. A neighbor is a board were one queen swap is made

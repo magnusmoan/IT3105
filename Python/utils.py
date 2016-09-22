@@ -113,3 +113,4 @@ def generate_neighborhood(solution):
             neighbor = solution[:index1] + (element2,) + solution[index1+1:index2] + (element1,) + solution[index2+1:]
             neighborhood.append(neighbor)
     return neighborhood
+

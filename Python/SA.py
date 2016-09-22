@@ -1,17 +1,20 @@
 import math
+import random
 from time import time
-from random import Random, random
-from utils import no_diagonal_conflict, diagonal_conflict_count,fitness,generate_mirror_solution
-from input_handler import get_N_from_user, get_starting_positions_from_user
+from utils import * 
+from input_handler import setup_heuristic_algorithm
+from output_handler import show_solutions
 
-N = get_N_from_user()
+N, user_input, ROTATION_AND_MIRRORING_LEGAL = setup_heuristic_algorithm()
 SOLUTIONS = set([])
-MAX_FIT = N*(N-1)/2
-dt = 0.1
-POPULATION_FACTOR = 1000
-TEMP_0 = 1000
+STEP_BY_STEP = []
+MAX_FITNESS = N*(N-1)/2
+NEIGHBORHOOD_SIZE = MAX_FITNESS
+MAX_ITERATIONS = 10
+dt = 1
+TEMP_0 = 100
 TEMP_T = 0.0001
-R = Random()
+TESTER = 0
 
 def swap_attacked_queen(col_list):
 	attacked_queen_index = []
@@ -24,36 +27,61 @@ def swap_attacked_queen(col_list):
 	col_list[i1], col_list[i2] = col_list[i2], col_list[i1]
 	return col_list
 
-def get_initial_population(user_input=None):
-	population = []
-	if user_input != None: population.append(user_input)
-	for i in range(N*POPULATION_FACTOR):
-		col_list = [i for i in range(N)]
-		R.shuffle(col_list)
-		population.append(col_list)
-	return population
 
-def simmulated_annealing(pop):
-	n = 0
+def simmulated_annealing(curr_board, runNo):
 	t = TEMP_0
-	x = pop.pop()
 	while (t > TEMP_T):
-		y = swap_attacked_queen(x)
-		fit_x,fit_y = fitness(x,MAX_FIT), fitness(y,MAX_FIT)
-		prob = math.exp(-(fit_y-fit_x)/t)
-		if fit_y >= fit_x or prob > R.random():
-			x = y
-			if fitness(x,MAX_FIT) == MAX_FIT: 
-				SOLUTIONS.add(tuple(x))
-				SOLUTIONS.add(generate_mirror_solution(x,N))
-				x = pop.pop()
-		t = t - dt
-		print "Iteration",n," Temp:",t," Num solutions:",len(SOLUTIONS)
-		n += 1
-	
-if __name__=='__main__':
-	start_time = time()
-	initial_population = get_initial_population()
-	simmulated_annealing(initial_population)
-	end_time = time()
-	print "\nFound", len(SOLUTIONS), "solutions in",end_time-start_time,"seconds"
+
+            if len(SOLUTIONS) == 0:
+                STEP_BY_STEP.append(curr_board)
+
+	    neighbors = generate_neighborhood(curr_board)
+
+            # Find the most promissing neighbor based on fitness
+            best_neighbor_fitness = 0
+            for neighbor in neighbors:
+                if neighbor in SOLUTIONS:
+                    continue
+                curr_fitness = fitness(neighbor, MAX_FITNESS)
+                if curr_fitness > best_neighbor_fitness:
+                    best_neighbor = neighbor
+                    best_neighbor_fitness = curr_fitness
+
+                
+            # Compare the best neighbor with the current board. 
+            # If the neighbor is better we set it as the current board        
+	    curr_board_fitness = fitness(curr_board,MAX_FITNESS)
+            print curr_board, curr_board_fitness
+            print best_neighbor, best_neighbor_fitness
+            raw_input("")
+            if best_neighbor_fitness >= curr_board_fitness:
+                curr_board_fitness = best_neighbor_fitness
+                curr_board = best_neighbor
+                
+            else:
+                prob = math.exp(-(best_neighbor_fitness - curr_board_fitness)/t)
+                if prob < random.random():
+                    print prob
+                    print "Random event happened!"
+                    curr_board = list(curr_board)
+                    random.shuffle(curr_board)
+                    curr_board = tuple(curr_board)
+                    curr_board_fitness = fitness(curr_board, MAX_FITNESS)
+
+            if curr_board_fitness == MAX_FITNESS and curr_board not in SOLUTIONS:
+
+                if len(SOLUTIONS) == 0:
+                    STEP_BY_STEP.append(curr_board)
+
+                SOLUTIONS.add(curr_board)
+                #SOLUTIONS.add(generate_mirror_solution(curr_board, N))
+                return
+	    t = t - dt
+            print "Run number: ", runNo, " Temp:",t
+
+start_time = time()
+initial_board = tuple(uniquefy_input(subtract_one_from_list(user_input),N))
+for runNo in range(MAX_ITERATIONS):
+    simmulated_annealing(initial_board, runNo)
+show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start_time, N, False)
+
