@@ -49,23 +49,6 @@ def diagonal_conflict_count(row, col, solution):
 
     return conflicts
 
-# Takes a list/tuple representing an n-queens solution as input and mirrors the solution
-# to create a new solution.
-def generate_mirror_solution(solution, n):
-    solution = list(solution)
-    mirror = [0 for _ in range(n)]
-    n -= 1
-    for index, element in enumerate(solution):
-        mirror[n-index] = element
-
-    return tuple(mirror)
-
-def rotate_right(solution, n):
-    n -= 1
-    rotated = list(solution)
-    for col, row in enumerate(solution):
-        rotated[n - row] = col
-    return tuple(rotated)
 
 # Subtracts 1 from all numbers in a list and returns the modified list
 def subtract_one_from_list(a):
@@ -106,11 +89,44 @@ def starting_positions_valid(starting_positions, n):
 
     return True
 
-def generate_neighborhood(solution):
+def generate_neighborhood(board):
     neighborhood = []
-    for index1, element1 in enumerate(solution):
-        for index2, element2 in enumerate(solution[index1+1:], index1+1):
-            neighbor = solution[:index1] + (element2,) + solution[index1+1:index2] + (element1,) + solution[index2+1:]
+    for index1, element1 in enumerate(board):
+        for index2, element2 in enumerate(board[index1+1:], index1+1):
+            neighbor = board[:index1] + (element2,) + board[index1+1:index2] + (element1,) + board[index2+1:]
             neighborhood.append(neighbor)
     return neighborhood
 
+def generate_neighborhood_with_fitness(board, max_fitness):
+    neighborhood = []
+    for index1, element1 in enumerate(board):
+        for index2, element2 in enumerate(board[index1+1:], index1+1):
+            neighbor = board[:index1] + (element2,) + board[index1+1:index2] + (element1,) + board[index2+1:]
+            neighborhood.append((neighbor, fitness(neighbor, max_fitness)))
+    return neighborhood
+
+# Takes a list/tuple representing an n-queens solution as input and mirrors the solution
+# to create a new solution.
+def generate_mirror_solution(solution, n):
+    solution = list(solution)
+    mirror = [0 for _ in range(n)]
+    n -= 1
+    for index, element in enumerate(solution):
+        mirror[n-index] = element
+
+    return tuple(mirror)
+
+def rotate_right(solution, n):
+    n -= 1
+    rotated = list(solution)
+    for col, row in enumerate(solution):
+        rotated[n - row] = col
+    return tuple(rotated)
+
+def add_mirror_and_rotated_solutions(solution, n, solutions):
+    mirror = generate_mirror_solution(solution, n)
+    solution_rotated = rotate_right(solution, n)
+    mirror_rotated = rotate_right(mirror, n)
+    solutions.add(solution_rotated)
+    solutions.add(mirror_rotated)
+    solutions.add(mirror)

@@ -1,6 +1,6 @@
 from time import time
 from collections import deque
-from utils import fitness, generate_mirror_solution, generate_neighborhood, subtract_one_from_list, uniquefy_input, rotate_right
+from utils import fitness, generate_neighborhood, subtract_one_from_list, uniquefy_input, add_mirror_and_rotated_solutions
 from output_handler import show_solutions
 from input_handler import setup_heuristic_algorithm
 
@@ -11,8 +11,9 @@ SHORT_TERM = deque([], SHORT_TERM_SIZE)
 SOLUTIONS = set([])
 STEP_BY_STEP = []
 
-# Max number of iterations
-MAX_ITERATIONS = 500
+# Stopping criterias
+MAX_ITERATIONS = 1000000  # Maximum allowed number of iterations
+MAX_TIME = 600            # Maximum allowed running time in seconds
 
 # Maximum number of iterations without improvement before we allow a tabu solution
 MAX_ITERATIONS_WITHOUT_IMPROVEMENT = 5
@@ -34,14 +35,7 @@ def tabu_search(curr_board):
         if curr_best_fitness == MAX_FITNESS:
             SOLUTIONS.add(curr_board) 
             if ROTATION_AND_MIRRORING_LEGAL:
-                mirror = generate_mirror_solution(curr_board, N)
-                curr_board_rotated = rotate_right(curr_board, N)
-                mirror_rotated = rotate_right(mirror, N)
-                if fitness(curr_board_rotated, MAX_FITNESS) == MAX_FITNESS:
-                    SOLUTIONS.add(curr_board_rotated)
-                if fitness(mirror_rotated, MAX_FITNESS) == MAX_FITNESS:
-                    SOLUTIONS.add(mirror_rotated)
-                SOLUTIONS.add(mirror)
+                add_mirror_and_rotated_solutions(curr_board, N, SOLUTIONS)
             curr_best_fitness = 0
 
         # Find all neighbors. A neighbor is a board were one queen swap is made
@@ -71,9 +65,11 @@ def tabu_search(curr_board):
             curr_best_fitness = best_neighbor_fitness
             curr_board = best_neighbor
 
+        if time() - start_time > MAX_TIME:
+            return
 
 
-start = time()
+start_time = time()
 tabu_search(tuple(uniquefy_input(subtract_one_from_list(user_input), N)))
-show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start, N, False)
+show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start_time, N, False)
 
