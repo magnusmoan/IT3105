@@ -13,8 +13,9 @@ MAX_FITNESS = N*(N-1)/2
 NEIGHBORHOOD_SIZE = int(N)
 
 # Stopping criterias
-MAX_ITERATIONS = 100  # Maximum allowed number of iterations
-MAX_TIME = 1000         # Maximum allowed running time in seconds
+MAX_ITERATIONS = 10000  # Maximum allowed number of iterations
+MAX_TIME = 600          # Maximum allowed running time in seconds
+NO_NEW_SOLUTION_ROUND_LIMIT = 5 # Maximum number of iterations in a row without finding any new solutions
 
 # Temperature variables
 dt = 0.001
@@ -73,9 +74,15 @@ def simulated_annealing(curr_board, runNo):
 
 start_time = time()
 initial_board = tuple(uniquefy_input(subtract_one_from_list(user_input),N))
+no_of_solutions = 0
+rounds_without_solution_left = NO_NEW_SOLUTION_ROUND_LIMIT
 for runNo in xrange(MAX_ITERATIONS):
     simulated_annealing(initial_board, runNo)
     if time() - start_time > MAX_TIME: break
-
+    if len(SOLUTIONS) - no_of_solutions == 0:
+        rounds_without_solution_left -= 1
+        if rounds_without_solution_left == 0: break
+    else:
+        rounds_without_solution_left = NO_NEW_SOLUTION_ROUND_LIMIT
 show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start_time, N, False)
 
