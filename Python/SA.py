@@ -15,9 +15,9 @@ MAX_ITERATIONS = 1000  # Maximum allowed number of iterations
 MAX_TIME = 160         # Maximum allowed running time in seconds
 
 # Temperature variables
-dt = .99
-TEMP_0 = 10
-TEMP_T = 0.01
+dt = 0.001
+TEMP_0 = 1
+TEMP_T = 0
 
 def simulated_annealing(curr_board, runNo):
 	t = TEMP_0
@@ -70,7 +70,7 @@ def simulated_annealing(curr_board, runNo):
                     add_mirror_and_rotated_solutions(curr_board, N, SOLUTIONS)
                 print "Solution found. Temperature: ", t
                 return
-	    t = t*dt
+	    t -= dt
 
 start_time = time()
 initial_board = tuple(uniquefy_input(subtract_one_from_list(user_input),N))

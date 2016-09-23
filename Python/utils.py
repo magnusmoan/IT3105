@@ -82,8 +82,8 @@ def starting_positions_valid(starting_positions, n):
         print "Duplicates"
         return False
 
-    for col, row in enumerate(starting_positions):
-        if not no_diagonal_conflict(row, col, starting_positions):
+    for col, row in enumerate(starting_positions[1:], 1):
+        if not no_diagonal_conflict(row, col, starting_positions[:col]):
             print "Diagonal conflict"
             return False
 
