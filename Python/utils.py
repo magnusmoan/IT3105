@@ -1,3 +1,5 @@
+import random as random
+
 # Takes as input a list/tuple and an integer n (length of list/tuple)
 # Returns a list where all duplicates have been exchanged for unused numbers in the
 # range 0 to n
@@ -97,8 +99,22 @@ def generate_neighborhood(board):
             neighborhood.append(neighbor)
     return neighborhood
 
-def generate_neighborhood_with_fitness(board, max_fitness):
+def generate_random_neighborhood(board, neighborhood_size, max_fitness, n):
+    neighborhood = set([])
+    n -= 1
+
+    for _ in xrange(neighborhood_size):
+        x = random.randint(0, n)
+        y = random.choice(range(0,x) + range(x+1,n))
+        neighbor = list(board[:])
+        neighbor[x], neighbor[y] = neighbor[y], neighbor[x]
+        neighborhood.add((tuple(neighbor), fitness(neighbor, max_fitness)))
+
+    return neighborhood
+
+def generate_neighborhood_with_fitness(board, max_fitness, n):
     neighborhood = []
+    n -= 1
     for index1, element1 in enumerate(board):
         for index2, element2 in enumerate(board[index1+1:], index1+1):
             neighbor = board[:index1] + (element2,) + board[index1+1:index2] + (element1,) + board[index2+1:]
