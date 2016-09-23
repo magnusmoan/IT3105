@@ -14,7 +14,7 @@ NEIGHBORHOOD_SIZE = int(N)
 
 # Stopping criterias
 MAX_ITERATIONS = 10000  # Maximum allowed number of iterations
-MAX_TIME = 600          # Maximum allowed running time in seconds
+MAX_TIME = 150          # Maximum allowed running time in seconds
 NO_NEW_SOLUTION_ROUND_LIMIT = 5 # Maximum number of iterations in a row without finding any new solutions
 
 # Temperature variables
