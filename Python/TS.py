@@ -12,7 +12,7 @@ SOLUTIONS = set([])
 STEP_BY_STEP = []
 
 # Stopping criterias
-MAX_ITERATIONS = 2000  # Maximum allowed number of iterations
+MAX_ITERATIONS = 200000  # Maximum allowed number of iterations
 MAX_TIME = 150            # Maximum allowed running time in seconds
 
 # Maximum number of iterations without improvement before we allow a tabu solution
@@ -24,7 +24,7 @@ def tabu_search(curr_board):
     max_iterations_left = MAX_ITERATIONS_WITHOUT_IMPROVEMENT
     curr_best_fitness = fitness(curr_board, MAX_FITNESS)
     for iteration in xrange(MAX_ITERATIONS):
-        print "Starting iteration number: " + str(iteration)
+        #print "Starting iteration number: " + str(iteration)
 
         # If we are searching for the first solution we add each step to the step by step list
         if len(SOLUTIONS) == 0:
