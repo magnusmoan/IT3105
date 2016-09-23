@@ -1,6 +1,6 @@
 from time import time
 from collections import deque
-from utils import fitness, generate_neighborhood, subtract_one_from_list, uniquefy_input, add_mirror_and_rotated_solutions
+from utils import fitness, generate_neighborhood, subtract_one_from_list, uniquefy_input, add_mirror_and_rotated_solutions, generate_random_neighborhood
 from output_handler import show_solutions
 from input_handler import setup_heuristic_algorithm
 
@@ -13,7 +13,7 @@ STEP_BY_STEP = []
 
 # Stopping criterias
 MAX_ITERATIONS = 2000  # Maximum allowed number of iterations
-MAX_TIME = 600            # Maximum allowed running time in seconds
+MAX_TIME = 150            # Maximum allowed running time in seconds
 
 # Maximum number of iterations without improvement before we allow a tabu solution
 MAX_ITERATIONS_WITHOUT_IMPROVEMENT = 5
@@ -42,7 +42,7 @@ def tabu_search(curr_board):
         neighborhood = generate_neighborhood(curr_board)
 
         best_neighbor_fitness = 0
-        for _,neighbor in enumerate(neighborhood):
+        for neighbor in neighborhood:
             if neighbor in SHORT_TERM or neighbor in SOLUTIONS:
                 continue
             
