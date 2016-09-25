@@ -1,4 +1,4 @@
-import math
+
 import random
 from time import time
 from utils import * 
@@ -25,6 +25,7 @@ TEMP_0 = 10
 TEMP_T = 0
 MAX_LOOP_ROUNDS = int((TEMP_0 - TEMP_T) / dt)
 ###############################################
+
 
 def simulated_annealing(curr_board, runNo):
 	t = TEMP_0
@@ -73,7 +74,7 @@ def simulated_annealing(curr_board, runNo):
                 SOLUTIONS.add(curr_board)
                 if ROTATION_AND_MIRRORING_LEGAL:
                     add_mirror_and_rotated_solutions(curr_board, N, SOLUTIONS)
-                print "Solution found. Temperature: ", t
+                print "Solution found.
                 return
 	    t -= dt
 
