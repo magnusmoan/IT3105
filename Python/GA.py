@@ -20,8 +20,8 @@ NUM_SEL = int(POP_SIZE*.2)
 CROSSOVER_RATE = max(1, int(math.ceil(N/10.0)))
 
 # Stopping criterias
-MAX_ITER = 1000   # Maximum allower number of iterations
-MAX_TIME = 90    # Maximum allowed running time in seconds
+MAX_ITER = 10000   # Maximum allower number of iterations
+MAX_TIME = 150    # Maximum allowed running time in seconds
 ###############################################
 
 
@@ -39,8 +39,7 @@ def mutation(col_list):
 	return tuple(col_list)
 
 # A new individual is created by performing a crossover of two individuals
-def crossover(p1,p2): 
-	#swath = random.randint(2, N/2)
+def crossover(p1,p2, crossover_rate): 
         swath = CROSSOVER_RATE
 	i = random.randint(0,N - swath)
 	s = range(i,i+swath)
@@ -76,6 +75,8 @@ def generate_initial_population(user_input):
 
 def genetic_algorithm(initial_population):
 	next_population = initial_population
+        generation_without_sol = 10
+        crossover_rate = int(N/2)
         for t in range(MAX_ITER):
                 no_of_solutions = len(SOLUTIONS) 
                 print_current_status(MAX_TIME - (time() - start_time), MAX_ITER - t, no_of_solutions)
@@ -86,7 +87,7 @@ def genetic_algorithm(initial_population):
 		for i in xrange(POP_SIZE):
 			x = population[random.randint(0,n)][0]
 			y = population[random.randint(0,n)][0]
-			z = crossover(x,y)
+			z = crossover(x,y, crossover_rate)
                         z_fitness = fitness(z, MAX_FITNESS)
                         if z_fitness != MAX_FITNESS:
 			        z = mutation(list(z))

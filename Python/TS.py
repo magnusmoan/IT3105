@@ -15,7 +15,7 @@ SOLUTIONS = set([])
 STEP_BY_STEP = []
 
 # Stopping criterias
-MAX_ITER = 200000  # Maximum allowed number of iterations
+MAX_ITER = 20000  # Maximum allowed number of iterations
 MAX_TIME = 150            # Maximum allowed running time in seconds
 
 # Maximum number of iterations without improvement before we allow a tabu solution
