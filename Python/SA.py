@@ -1,9 +1,9 @@
-
+import math
 import random
 from time import time
 from utils import * 
 from input_handler import setup_heuristic_algorithm
-from output_handler import show_solutions
+from output_handler import show_solutions, print_current_status
 
 ###############################################
 ################### SETUP #####################
@@ -73,8 +73,7 @@ def simulated_annealing(curr_board, runNo):
 
                 SOLUTIONS.add(curr_board)
                 if ROTATION_AND_MIRRORING_LEGAL:
-                    add_mirror_and_rotated_solutions(curr_board, N, SOLUTIONS)
-                print "Solution found.
+                    add_mirror_and_rotated_solutions(curr_board, N, SOLUTIONS, MAX_FITNESS)
                 return
 	    t -= dt
 
@@ -85,6 +84,7 @@ def run():
     rounds_without_solution_left = NO_NEW_SOLUTION_ROUND_LIMIT
 
     for execution_number in xrange(MAX_ITERATIONS):
+        print_current_status(MAX_TIME - (time() - start_time), MAX_ITERATIONS - execution_number, len(SOLUTIONS))
         simulated_annealing(initial_board, execution_number)
 
         # The algorithm stops running if either we have used more time than

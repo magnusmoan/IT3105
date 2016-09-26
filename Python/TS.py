@@ -2,7 +2,7 @@ from time import time
 from collections import deque
 from utils import *
 from input_handler import setup_heuristic_algorithm
-from output_handler import show_solutions
+from output_handler import show_solutions, print_current_status
 
 ###############################################
 ################### SETUP #####################
@@ -15,18 +15,19 @@ SOLUTIONS = set([])
 STEP_BY_STEP = []
 
 # Stopping criterias
-MAX_ITERATIONS = 200000  # Maximum allowed number of iterations
+MAX_ITER = 200000  # Maximum allowed number of iterations
 MAX_TIME = 150            # Maximum allowed running time in seconds
 
 # Maximum number of iterations without improvement before we allow a tabu solution
-MAX_ITERATIONS_WITHOUT_IMPROVEMENT = 5
+MAX_ITER_WITHOUT_IMPROVEMENT = 5
 ###############################################
 
 
 def tabu_search(curr_board):
-    max_iterations_left = MAX_ITERATIONS_WITHOUT_IMPROVEMENT
+    max_iterations_left = MAX_ITER_WITHOUT_IMPROVEMENT
     curr_best_fitness = fitness(curr_board, MAX_FITNESS)
-    for iteration in xrange(MAX_ITERATIONS):
+    for iteration in xrange(MAX_ITER):
+        print_current_status(MAX_TIME - (time() - start_time), MAX_ITER - iteration, len(SOLUTIONS))
 
         # If we are searching for the first solution we add each step to the step by step list
         if len(SOLUTIONS) == 0:
@@ -37,7 +38,7 @@ def tabu_search(curr_board):
         if curr_best_fitness == MAX_FITNESS:
             SOLUTIONS.add(curr_board) 
             if ROTATION_AND_MIRRORING_LEGAL:
-                add_mirror_and_rotated_solutions(curr_board, N, SOLUTIONS)
+                add_mirror_and_rotated_solutions(curr_board, N, SOLUTIONS, MAX_FITNESS)
             curr_best_fitness = 0
 
         # Find all neighbors. A neighbor is a board were one queen swap is made
@@ -60,7 +61,7 @@ def tabu_search(curr_board):
             if max_iterations_left == 0:
                 curr_board = SHORT_TERM.popleft() 
                 curr_best_fitness = fitness(curr_board, MAX_FITNESS)
-                max_iterations_left = MAX_ITERATIONS_WITHOUT_IMPROVEMENT
+                max_iterations_left = MAX_ITER_WITHOUT_IMPROVEMENT
             else:
                 max_iterations_left -= 1
         else:

@@ -139,10 +139,10 @@ def rotate_right(solution, n):
         rotated[n - row] = col
     return tuple(rotated)
 
-def add_mirror_and_rotated_solutions(solution, n, solutions):
+def add_mirror_and_rotated_solutions(solution, n, solutions, max_fitness):
     mirror = generate_mirror_solution(solution, n)
     solution_rotated = rotate_right(solution, n)
     mirror_rotated = rotate_right(mirror, n)
-    solutions.add(solution_rotated)
-    solutions.add(mirror_rotated)
+    if fitness(solution_rotated, max_fitness) == max_fitness: solutions.add(solution_rotated)
+    if fitness(mirror_rotated, max_fitness) == max_fitness: solutions.add(mirror_rotated)
     solutions.add(mirror)

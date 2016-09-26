@@ -41,3 +41,8 @@ def format_solution(solution):
 
 def format_solution_backtracking(solution):
     return " ".join(map(str, solution))
+
+def print_current_status(time_left, rounds_left, solutions):
+    time_left = ("%.0f" % time_left).ljust(5, " ")
+    solutions = str(solutions).ljust(8, " ")
+    print "Iterations left: ", str(rounds_left).ljust(6," "), " Time left: ", time_left, " Number of solutions: ", solutions

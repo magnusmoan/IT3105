@@ -1,40 +1,51 @@
 import math
 from time import time
 from random import Random, random
-from utils import diagonal_conflict_count,fitness,generate_mirror_solution,generate_neighborhood, uniquefy_input, rotate_right
-from input_handler import get_N_from_user, starting_positions_heuristic_algorithms
-from output_handler import show_solutions
+from utils import *
+from input_handler import setup_heuristic_algorithm
+from output_handler import show_solutions, print_current_status
 
-N = get_N_from_user()
-user_input = uniquefy_input(starting_positions_heuristic_algorithms(N),N)
-STEP_BY_STEP = []
+###############################################
+################### SETUP #####################
+N, user_input, ROTATION_AND_MIRRORING_LEGAL = setup_heuristic_algorithm()
+initial_board = tuple(uniquefy_input(subtract_one_from_list(user_input), N))
 SOLUTIONS = set([])
-MUTATION_RATE = 0.1
-POP_SIZE = 1000
-NUM_SEL = 100
+STEP_BY_STEP = []
 MAX_FITNESS = (N*(N-1))/2
-MAX_ITER = 100
-R = Random()
 
+# GA design parameters
+MUTATION_RATE = 0.2
+POP_SIZE = min(N*20, math.factorial(N))
+NUM_SEL = int(POP_SIZE*.2)
+CROSSOVER_RATE = max(1, int(math.ceil(N/10.0)))
+
+# Stopping criterias
+MAX_ITER = 1000   # Maximum allower number of iterations
+MAX_TIME = 90    # Maximum allowed running time in seconds
+###############################################
+
+
+# Selection picks the NUM_SEL best individuals out of a given population
 def selection(pop):
-	next_pop = [(fitness(pop[i],MAX_FITNESS),pop[i]) for i in range(len(pop))]
-	next_pop_sorted = sorted(next_pop,key=lambda x:x[0],reverse=True)[:NUM_SEL]
-	next_pop_sorted_list = [elem[1] for elem in next_pop_sorted]
-	return next_pop_sorted_list
+    pop.sort(key = lambda x: x[1], reverse=True)
+    return pop[:NUM_SEL]
 
+# There's a certain chance that an individual will mutate, which means 
+# that 2 random queens are swapped.
 def mutation(col_list):
-	r = R.random()
-	if r < MUTATION_RATE:
-	    i,j = R.randint(0,N-1), R.randint(0,N-1)
+	if random.random() < MUTATION_RATE:
+	    i,j = random.randint(0,N-1), random.randint(0,N-1)
 	    col_list[i], col_list[j] = col_list[j], col_list[i]
 	return tuple(col_list)
 
+# A new individual is created by performing a crossover of two individuals
 def crossover(p1,p2): 
-	swath = R.randint(1,math.floor(N/2))
-	i = R.randint(0,N - swath)
+	#swath = random.randint(2, N/2)
+        swath = CROSSOVER_RATE
+	i = random.randint(0,N - swath)
 	s = range(i,i+swath)
 	child = []
-	for j in range(N):
+	for j in xrange(N):
 		child.append(-1)
 		if (j in s): child[j] = p1[j]
 	for j in s:
@@ -45,64 +56,58 @@ def crossover(p1,p2):
 				V = p1[p2_Vi]
 				p2_Vi = p2.index(V)
 			child[p2_Vi] = p2[j]
-	for j in range(N):
+	for j in xrange(N):
 		if child[j] == -1: child[j] = p2[j]
-	return child
+	return tuple(child)
 
 
+# An initial population is generated from the user input by finding neighbors
+# of the input. A neighbor is defined as a board that contains 1 queen swap.
 def generate_initial_population(user_input):
 	population = set([])
-	x = user_input
+	curr_board = user_input
 	while (len(population) < POP_SIZE):
-		neighborhood = generate_neighborhood(tuple(x))
-		for n in neighborhood:
-			population.add(n)
-		x = neighborhood[R.randint(0,len(neighborhood) - 1)]
+		neighborhood = generate_random_neighborhood(curr_board, N, MAX_FITNESS, N)
+		population.update(neighborhood)
+                for curr_board in neighborhood:
+                    curr_board = curr_board[0]
+                    break
 	return list(population)
 
 def genetic_algorithm(initial_population):
-	t = 0
 	next_population = initial_population
-	while (t < MAX_ITER):
-		print "New generation",t,". Number of solutions:", len(SOLUTIONS)
+        for t in range(MAX_ITER):
+                no_of_solutions = len(SOLUTIONS) 
+                print_current_status(MAX_TIME - (time() - start_time), MAX_ITER - t, no_of_solutions)
 		population = selection(next_population)
-		if (len(SOLUTIONS) == 0): STEP_BY_STEP.append(population[0])
+		if (no_of_solutions == 0): STEP_BY_STEP.append(population[0][0])
 		next_population = []
 		n = len(population) - 1
-		t += 1
-		for i in range(POP_SIZE):
-			x = population[R.randint(0,n)]
-			y = population[R.randint(0,n)]
+		for i in xrange(POP_SIZE):
+			x = population[random.randint(0,n)][0]
+			y = population[random.randint(0,n)][0]
 			z = crossover(x,y)
-			z = mutation(z)
-			if fitness(z,MAX_FITNESS) == MAX_FITNESS: 
+                        z_fitness = fitness(z, MAX_FITNESS)
+                        if z_fitness != MAX_FITNESS:
+			        z = mutation(list(z))
+                                z_fitness = fitness(z, MAX_FITNESS)
+			if z_fitness == MAX_FITNESS: 
                                 if (len(SOLUTIONS) == 0): STEP_BY_STEP.append(z)
 				SOLUTIONS.add(z)
-                                mirror = generate_mirror_solution(z,N)
-				SOLUTIONS.add(mirror)
-                                z_rotated = rotate_right(z,N)
-                                mirror_rotated = rotate_right(mirror,N)
+                                if ROTATION_AND_MIRRORING_LEGAL:
+                                    add_mirror_and_rotated_solutions(z, N, SOLUTIONS, MAX_FITNESS)
 
-                                if fitness(z_rotated,MAX_FITNESS) ==  MAX_FITNESS:
-                                    SOLUTIONS.add(z_rotated)
-                                if fitness(mirror_rotated,MAX_FITNESS) == MAX_FITNESS:
-                                    SOLUTIONS.add(mirror_rotated)
+			elif ((z, z_fitness) not in next_population and (z, z_fitness) not in SOLUTIONS): 
+				next_population.append((z, z_fitness))
+                
+                if time() - start_time > MAX_TIME:
+                        return
 
-			elif (z not in next_population and z not in SOLUTIONS): 
-				next_population.append(z)
-
-start = time()
-initial_population = generate_initial_population(user_input)
-genetic_algorithm(initial_population)	
-show_solutions(STEP_BY_STEP,SOLUTIONS,time() - start,N,False)
-
-"""
-def get_initial_population(user_input=None):
-	population = []
-	if user_input != None: population.append(user_input)
-	for i in range(POP_SIZE):
-		col_list = [i for i in range(N)]
-		R.shuffle(col_list)
-		population.append(col_list)
-	return population
-"""
+def run():
+    global start_time
+    start_time = time()
+    initial_population = generate_initial_population(initial_board)
+    genetic_algorithm(initial_population)	
+    show_solutions(STEP_BY_STEP, SOLUTIONS, time() - start_time, N, False)
+    
+run()
