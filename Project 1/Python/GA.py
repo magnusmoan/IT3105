@@ -21,7 +21,7 @@ CROSSOVER_RATE = max(1, int(math.ceil(N/10.0)))
 
 # Stopping criterias
 MAX_ITER = 10000   # Maximum allower number of iterations
-MAX_TIME = 150    # Maximum allowed running time in seconds
+MAX_TIME = 15    # Maximum allowed running time in seconds
 ###############################################
 
 
@@ -39,7 +39,7 @@ def mutation(col_list):
 	return tuple(col_list)
 
 # A new individual is created by performing a crossover of two individuals
-def crossover(p1,p2, crossover_rate): 
+def crossover(p1,p2): 
         swath = CROSSOVER_RATE
 	i = random.randint(0,N - swath)
 	s = range(i,i+swath)
@@ -63,6 +63,7 @@ def crossover(p1,p2, crossover_rate):
 # An initial population is generated from the user input by finding neighbors
 # of the input. A neighbor is defined as a board that contains 1 queen swap.
 def generate_initial_population(user_input):
+        STEP_BY_STEP.append(user_input)
 	population = set([])
 	curr_board = user_input
 	while (len(population) < POP_SIZE):
@@ -75,8 +76,6 @@ def generate_initial_population(user_input):
 
 def genetic_algorithm(initial_population):
 	next_population = initial_population
-        generation_without_sol = 10
-        crossover_rate = int(N/2)
         for t in range(MAX_ITER):
                 no_of_solutions = len(SOLUTIONS) 
                 print_current_status(MAX_TIME - (time() - start_time), MAX_ITER - t, no_of_solutions)
@@ -87,7 +86,7 @@ def genetic_algorithm(initial_population):
 		for i in xrange(POP_SIZE):
 			x = population[random.randint(0,n)][0]
 			y = population[random.randint(0,n)][0]
-			z = crossover(x,y, crossover_rate)
+			z = crossover(x,y)
                         z_fitness = fitness(z, MAX_FITNESS)
                         if z_fitness != MAX_FITNESS:
 			        z = mutation(list(z))
@@ -98,7 +97,7 @@ def genetic_algorithm(initial_population):
                                 if ROTATION_AND_MIRRORING_LEGAL:
                                     add_mirror_and_rotated_solutions(z, N, SOLUTIONS, MAX_FITNESS)
 
-			elif ((z, z_fitness) not in next_population and (z, z_fitness) not in SOLUTIONS): 
+			elif ((z, z_fitness) not in next_population and z not in SOLUTIONS): 
 				next_population.append((z, z_fitness))
                 
                 if time() - start_time > MAX_TIME:
