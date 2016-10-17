@@ -3,13 +3,18 @@ import gym
 import operator
 
 class Agent(object):
-    def __init__(self, env_name):
+    def __init__(self, env_name, q=None, actions=None, learning_rate=0, eps=0, discount_rate=0):
         self.env = gym.make(env_name)
         self.action_space = self.env.action_space
         self.observation_space = self.env.observation_space
 
-    def select_action(self, position):
-        raise NotImplementedError
+        self.learning_rate = learning_rate
+        self.eps = eps
+        self.discount_rate = discount_rate
+
+        self.q = [q for _ in range(self.observation_space.n)]
+        self.action_dict = actions
+
 
     def run_env(self, ep_len, ep_count):
         env = self.env
@@ -30,9 +35,10 @@ class Agent(object):
 
         print "Average reward: ", float(total_reward) / float(ep_count) 
 
-    def run_env_with_learning(self, ep_len, ep_count, debug=False):
+    def run_env_with_learning(self, ep_len, ep_count, debug=False, choose_max_neighbor=True):
         env = self.env
-        total_reward = 0
+        total_reward1 = 0
+        total_reward2 = 0
         reward_list = []
         #env.monitor.start('/tmp/FrozenLake_test0', force=True)
 
@@ -40,23 +46,63 @@ class Agent(object):
             print episode
             position = env.reset()
             #env.render()
+            action = self.select_action(position, debug)
             for _ in xrange(ep_len):
-                action = self.select_action(position, debug)
                 new_position, reward, done, info = env.step(action)
-                self.update_q(position, action, new_position, reward)
-                #env.render()
+                next_action = self.select_action(new_position, debug)
+
+                if choose_max_neighbor:
+                    self.update_q(position, action, new_position, reward)
+                else:
+                    next_action = self.select_action(new_position, debug)
+                    self.update_q(position, action, new_position, reward, next_action)
+                
+                action = next_action
                 position = new_position
-                total_reward += reward
+                total_reward2 += reward
 
                 if done:
+                    if episode > ep_count-101:
+                        total_reward1 += reward
                     break
             
-            reward_per_episode = float(total_reward) / float(ep_count)
+            reward_per_episode = float(total_reward2) / float(episode+1)
             reward_list.append(reward_per_episode)
 
         #env.monitor.close()
         #gym.upload('/tmp/FrozenLake_test0', api_key='sk_FqhrkckbSkKZ5ScFyoZ7JQ')
-        return self.q, reward_list
+        return self.q, reward_list, total_reward1
+
+
+    def select_action(self, position):
+        curr_q_dict = self.q[position]
+        q_sum = sum(curr_q_dict.itervalues())
+
+        p_south = curr_q_dict['s'] / q_sum
+        p_west = (curr_q_dict['w'] / q_sum) + p_south
+        p_east = (curr_q_dict['e'] / q_sum) + p_west
+        p_north = (curr_q_dict['n'] / q_sum) + p_east
+
+        p_rand = random() 
+        if p_rand <= p_south: return self.action_dict['s']
+        if p_rand <= p_west: return self.action_dict['w']
+        if p_rand <= p_east: return self.action_dict['e']
+        if p_rand <= p_north: return self.action_dict['n']
+
+
+    def update_q(self, old_position, action, new_position, reward, next_action=None):
+        curr_q_dict = self.q[old_position]
+        action_dir = (list((self.action_dict).keys())[list((self.action_dict).values()).index(action)])
+        neighbor_dict = self.q[new_position]
+
+        if next_action == None:
+            neighbor_q = max(neighbor_dict.itervalues())
+        else:
+            next_action_dir = (list((self.action_dict).keys())[list((self.action_dict).values()).index(action)])
+            neighbor_q = neighbor_dict[next_action_dir]
+
+        added_value = self.learning_rate * (reward + self.discount_rate * neighbor_q - curr_q_dict[action_dir])
+        curr_q_dict[action_dir] += added_value
 
 
 class Lake_Agent(Agent):
@@ -77,48 +123,19 @@ class Lake_Agent(Agent):
         self.action_dict = {'s': 1, 'w': 0, 'e': 2, 'n': 3}
 
 
-    def select_action(self, position):
-        curr_q_dict = self.q[position]
-        q_sum = sum(curr_q_dict.itervalues())
-
-        p_south = curr_q_dict['s'] / q_sum
-        p_west = (curr_q_dict['w'] / q_sum) + p_south
-        p_east = (curr_q_dict['e'] / q_sum) + p_west
-        p_north = (curr_q_dict['n'] / q_sum) + p_east
-
-        p_rand = random() 
-        if p_rand <= p_south: return self.action_dict['s']
-        if p_rand <= p_west: return self.action_dict['w']
-        if p_rand <= p_east: return self.action_dict['e']
-        if p_rand <= p_north: return self.action_dict['n']
-
-    
-    def update_q(self, old_position, action, new_position, reward):
-        curr_q_dict = self.q[old_position]
-        action_dir = (list((self.action_dict).keys())[list((self.action_dict).values()).index(action)])
-        neighbor_dict = self.q[new_position]
-        best_neighbor_q = max(neighbor_dict.itervalues())
-
-        added_value = self.learning_rate * (reward + self.discount_rate * best_neighbor_q - curr_q_dict[action_dir])
-        curr_q_dict[action_dir] += added_value
-
-
-class Greedy_Lake_Agent(Lake_Agent):
     def select_action(self, position, debug=False):
         direction = max((self.q[position]).iteritems(), key=operator.itemgetter(1))[0]
         p_rand = random()
         if p_rand < self.eps:
-            action = self.action_space.sample()
+            return self.action_space.sample()
         else:
-            action = self.action_dict[direction]
-        """
-        if debug:
-            print self.q[position]
-            print direction
-            print action
-            raw_input()
-        """
-        return action
+            return self.action_dict[direction]
+    """
+    """
+
+    
+
+
 
 class Random_Agent(Agent):
     def select_action(self, position):
