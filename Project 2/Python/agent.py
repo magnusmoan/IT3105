@@ -65,7 +65,9 @@ class Agent(object):
                     break
             
             reward_list.append(total_reward / float(episode+1))
-            #reward_list.append(total_reward)
+
+            ### Uncomment for taxi ###
+            #reward_list.append(total_reward) 
             #total_reward = 0
             
             self.eps -= delta
