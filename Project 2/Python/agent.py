@@ -1,6 +1,7 @@
 from random import random
 import gym
 import operator
+from copy import copy
 
 class Agent(object):
     def __init__(self, env_name, q=None, actions=None, learning_rate=0, eps=0, discount_rate=0):
@@ -12,7 +13,7 @@ class Agent(object):
         self.eps = eps
         self.discount_rate = discount_rate
 
-        self.q = [q for _ in range(self.observation_space.n)]
+        self.q = [copy(q) for _ in range(self.observation_space.n)]
         self.action_dict = actions
 
 
@@ -37,10 +38,10 @@ class Agent(object):
 
     def run_env_with_learning(self, ep_len, ep_count, debug=False, choose_max_neighbor=True):
         env = self.env
-        total_reward1 = 0
-        total_reward2 = 0
+        total_reward = 0
         reward_list = []
-        #env.monitor.start('/tmp/FrozenLake_test0', force=True)
+        delta = (self.eps - 0.005) / float(ep_count)
+        env.monitor.start('/tmp/FrozenLake_test0', force=True)
 
         for episode in xrange(ep_count):
             print episode
@@ -54,24 +55,24 @@ class Agent(object):
                 if choose_max_neighbor:
                     self.update_q(position, action, new_position, reward)
                 else:
-                    next_action = self.select_action(new_position, debug)
                     self.update_q(position, action, new_position, reward, next_action)
                 
                 action = next_action
                 position = new_position
-                total_reward2 += reward
+                total_reward += reward
 
                 if done:
-                    if episode > ep_count-101:
-                        total_reward1 += reward
                     break
             
-            reward_per_episode = float(total_reward2) / float(episode+1)
-            reward_list.append(reward_per_episode)
+            reward_list.append(total_reward / float(episode+1))
+            #reward_list.append(total_reward)
+            #total_reward = 0
+            
+            self.eps -= delta
 
-        #env.monitor.close()
+        env.monitor.close()
         #gym.upload('/tmp/FrozenLake_test0', api_key='sk_FqhrkckbSkKZ5ScFyoZ7JQ')
-        return self.q, reward_list, total_reward1
+        return self.q, reward_list
 
 
     def select_action(self, position):
@@ -98,7 +99,7 @@ class Agent(object):
         if next_action == None:
             neighbor_q = max(neighbor_dict.itervalues())
         else:
-            next_action_dir = (list((self.action_dict).keys())[list((self.action_dict).values()).index(action)])
+            next_action_dir = (list((self.action_dict).keys())[list((self.action_dict).values()).index(next_action)])
             neighbor_q = neighbor_dict[next_action_dir]
 
         added_value = self.learning_rate * (reward + self.discount_rate * neighbor_q - curr_q_dict[action_dir])
