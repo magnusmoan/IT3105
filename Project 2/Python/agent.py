@@ -105,24 +105,7 @@ class Agent(object):
         curr_q_dict[action_dir] += added_value
 
 
-class Lake_Agent(Agent):
-    def __init__(self, q=None, learning_rate=0, eps=0, discount_rate=0):
-        self.env = gym.make("FrozenLake-v0")
-        self.action_space = self.env.action_space
-        self.observation_space = self.env.observation_space
-
-        self.learning_rate = learning_rate
-        self.eps = eps
-        self.discount_rate = discount_rate
-
-        if q == None:
-            self.q = [{'s': 0, 'w': 0, 'e': 0, 'n': 0} for _ in xrange(16)]
-        else:
-            self.q = q
-
-        self.action_dict = {'s': 1, 'w': 0, 'e': 2, 'n': 3}
-
-
+class Greedy_Agent(Agent):
     def select_action(self, position, debug=False):
         direction = max((self.q[position]).iteritems(), key=operator.itemgetter(1))[0]
         p_rand = random()
@@ -130,10 +113,6 @@ class Lake_Agent(Agent):
             return self.action_space.sample()
         else:
             return self.action_dict[direction]
-    """
-    """
-
-    
 
 
 
