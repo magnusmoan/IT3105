@@ -1,0 +1,12 @@
+Output
+- Show diagrams of the neurons of the ring at their current location, the connection to their two neighbour neurons, and the location of the TSP cities. 
+- Must produce the diagrams at user-specified intervals
+
+
+Implementation
+- Must support static, linear and exponential decay functions for learning rate and neighbourhood radius
+- For each dataset, generate at least 3 diagrams to show the status of the SOM at the beginning, middle and at the end of the best run. 
+- Illustrate the progress of the TSP by printing out the total distance encoded by the neuron-ring scaffolding (?). This have to be done every k steps of the algorithm, where k is user-specified. 
+
+
+
