@@ -64,11 +64,12 @@ class Agent(object):
                 if done:
                     break
             
-            reward_list.append(total_reward / float(episode+1))
+            #reward_list.append(total_reward / float(episode+1))
 
             ### Uncomment for taxi ###
-            #reward_list.append(total_reward) 
-            #total_reward = 0
+            reward_list.append(total_reward) 
+            print total_reward
+            total_reward = 0
             
             self.eps -= delta
 
