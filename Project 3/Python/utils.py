@@ -1,5 +1,13 @@
 import urllib2
+import math
 import numpy as np
+
+country_mapping = {
+	    "Western-Sahara" : "wi29.tsp", 
+	    "Djibouti" : "dj38.tsp", 
+	    "Qatar" : "qa194.tsp",
+	    "Urugay" : "uy734.tsp"	    
+	    }
 
 
 def get_nodes(country_id):
