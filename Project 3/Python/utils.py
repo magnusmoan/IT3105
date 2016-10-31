@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from time import time
 import urllib2
 import math
 import numpy as np
@@ -53,22 +54,13 @@ def normalize_nodes(country):
 	return np.array(nodes_normalized)
 
 normalized = normalize_nodes("Western-Sahara")
-test_list = [(8.0,9.0), (10.0, 1.0), (0.0, 2.0), (3.0,4.0), (5.0,0.0), (8.6, 10.0)]
-print normalized
+test_list = [(.8,.9), (1, .1), (0.0, .2), (.3,.4), (.5,0.0), (.86, 1)]
+#print normalized
 #normalized1 = get_nodes_normalized(test_list)
 #normalized2 = get_nodes_normalized(coordinates)
 
-#plot_graph(normalized2, normalized1, "West-Sahara", iterationNo=10)
-
+#plot_graph(normalized, test_list, "West-Sahara", iterationNo=10)
 
 def euclidean_distance(start,end):
-	"Calculates euclidean distance from two coordinates on the form (a,b)"
-	return np.linalg.norm(np.array(start) - np.array(end))
-
-def calc_distance(x1,y1,x2,y2):
-    return math.sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
-
-def gen_dist_matrix(coordinates):
-    return [[calc_distance(x1,y1,x2,y2) for (x2,y2) in coordinates] for (x1,y1) in coordinates]
-
+    return math.sqrt( (end[0] - start[0])**2 + (end[0] - start[0])**2 )
 
