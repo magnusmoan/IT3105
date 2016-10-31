@@ -6,104 +6,71 @@ import math
 country = "Western-Sahara"
 cities = get_nodes_normalized(country)
 neurons = []
-radius = 0.2
-learning_rate = 10.0
-delta_radius = 0.0001
-delta_learning_rate = 0.001
-weight = []
-dist = []
-K = N = len(cities)
 num_iterations = 1000
+K = len(cities * 2)
+N = len(cities)
+
+#   Decay-specific parametres
+radius = 5
+learning_rate = 10.0
+delta_learning_rate = 0.001
+delta_radius = learning_rate / num_iterations
+exponential_rate = 5.0
 
 def init():
 	""" Generates random neurons, computes weights	"""
-	for i in xrange(N):
-		
-		#   TODO: Implement static numpy arrays
-		weight.append([])
-		dist.append([])
-
-		for j in xrange(K):
-
-			#   TODO: Implement static numpy arrays
-			dist[i].append([])
-			weight[i].append([0,0])
-			
-                        """ Her er det noe som skurrer for meg: Listen neurons inneholder tupler av typen (x,y), hva skal vi da med weights? 
-                            Holder det ikke å bruke neuronslisten som weights? """
-			neurons.append([random(), random()])
-			weight[i][j][0] = cities[i][0] - neurons[j][0]
-			weight[i][j][1] = cities[i][1] - neurons[j][1]
-			dist[i][j] = euclidean_distance(cities[i], (neurons[j][0],neurons[j][1]))
+	neurons = [(random(), random()) for _ in range(K)]
 
 def find_closest_neuron(i):
 	""" Returns index j of the neuron closest to city i """
-	return dist[i].index(min(dist[i])) # Changed max to min, correct?
+	dist_list = [euclidean_distance(neurons[j],cities[i]) for j in range(K)]
+	return dist_list.indexof(min(dist_list))
 
 def find_neighbours(j):
-	""" Returns a list of tuples of the form (index of neuron, distance 
-	from neuron j). The returned list includes the neuron j itself """
+	""" Returns a list of tuples (indices of neighbours, distance) """
+	return [ (k, euclidean_distance(neuron[i],neuron[k % K])) for k in range(j - radius, j + radius)]
+
+def static(rate):
+	return rate
+
+def linear(rate):
+	return rate - 0.001
+
+def exponential(rate):
+	return math.exp(-rate/exponential_rate)
 	
-	neighbours = []
-        neuron_j = neurons[j]
-
-	for i in xrange(K):
-
-		dist_ij = euclidean_distance(neurons[i], neuron_j)
-
-		if (dist_ij <= radius):
-			neighbours.append((i, dist_ij))
-
-	return neighbours
+def decay(decay_function, rate):
+	return decay_function(rate)
 
 def update_weights(i):
-	""" The function fins the closest neuron j to city i, and its 
-	neighborhood, and updates the weight vectors, distance matrix
-	and neuron positions """
+	""" The function finds the closest neuron j to city i, and its 
+	neighborhood, and updates the neuron positions """
 	
 	closest_neuron = find_closest_neuron(i)
 	neighbourhood = find_neighbours(closest_neuron)
 
 	for (j, dist) in neighbourhood:
-		
-		#   TODO: Implement different learning functions
 		theta = learning_rate * (radius - dist) / radius
-		
-		delta_x = theta * (cities[i][0] - weight[i][j][0])
-		delta_y = theta * (cities[i][1] - weight[i][j][1])
-		
-		neurons[j][0] += delta_x
-		neurons[j][1] += delta_y
+		neurons[j][0] += theta * (cities[i][0] - neurons[j][0])
+		neurons[j][1] += theta * (cities[i][1] - neurons[j][1])
 
-		for k in xrange(N):
-			weight[k][j][0] += delta_x
-			weight[k][j][1] += delta_y
-			dist[k][j] = euclidean_distance( (weight[k][j][0], weight[k][j][1]), cities[k])
+def calculate_travelers_distance():
+	bridge = euclidean_distance(neurons[0],neurons[-1])
+	return sum([euclidean_distance(neurons[j], neurons[j+1]) for j in range(K - 1)]) + bridge
 
-def calculate_distance():
-	""" The function returns the total distance of the neurons """
-	return
+def calculate_error_distance():
+	return sum([euclidean_distance(neurons[find_closest_neuron[i]], cities[i]) for i in range(N)])
 
 def run():
 	init()
-
-	#   TODO: Should be user-specified
-	print_frequency = 10
-        print cities
-        plot_graph(cities, neurons, country)
-        return
 
 	for r in xrange(num_iterations):
 		
 		for i in xrange(N):
 			update_weights(i)
 
-		learning_rate -= delta_learning_rate
-		radius -= delta_radius
-
-                plot_graph
-	
-		if (r % print_frequency == 0):
-			print "Distance",calculate_distance(),"in round",r
+		learning_rate = decay(linear, learning_rate)
+		radius = decay(linear, radius)
+		
 
 run()
