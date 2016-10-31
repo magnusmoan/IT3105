@@ -19,7 +19,7 @@ MAX_ITER = 100	#Number of rounds
 
 
 class Neuron:
-	"The class defines a neuron-object designed to hold attributes and functinoality of the output layer neurons"
+	"The class defines a neuron-object designed to hold attributes and functionality of the output layer neurons"
 	def __init__(self, i):
 		self.weights = self.init_weights()
 		self.i = i
