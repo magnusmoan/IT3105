@@ -26,7 +26,7 @@ def get_nodes(country_id):
 		line_list = line.split(" ")
 		if line_list[0].isdigit():
 			latitude, longitude = line_list[1], line_list[2][:-2]
-			nodes.append((float(latitude), float(longitude)))
+			nodes.append([float(latitude), float(longitude)])
         data.close()
 	return nodes
 
@@ -49,18 +49,19 @@ def normalize_nodes(country):
             x_norm = (x - min_x) / interval_x
             y_norm = (y - min_y) / interval_y
 
-            nodes_normalized.append((x_norm, y_norm))
+            nodes_normalized.append([x_norm, y_norm])
 
 	return np.array(nodes_normalized)
-
-normalized = normalize_nodes("Western-Sahara")
-test_list = [(.8,.9), (1, .1), (0.0, .2), (.3,.4), (.5,0.0), (.86, 1)]
-#print normalized
-#normalized1 = get_nodes_normalized(test_list)
-#normalized2 = get_nodes_normalized(coordinates)
-
-#plot_graph(normalized, test_list, "West-Sahara", iterationNo=10)
 
 def euclidean_distance(start,end):
     return math.sqrt( (end[0] - start[0])**2 + (end[0] - start[0])**2 )
 
+
+def linear(delta):
+    return lambda x: x - delta
+
+def exponential(lam):
+    return lambda x: math.exp(- x / lam)
+
+def static(rate):
+    return rate
