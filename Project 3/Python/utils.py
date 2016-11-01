@@ -9,7 +9,8 @@ country_mapping = {
 	    "Western-Sahara" : "wi29.tsp", 
 	    "Djibouti" : "dj38.tsp", 
 	    "Qatar" : "qa194.tsp",
-	    "Urugay" : "uy734.tsp"	    
+	    "Urugay" : "uy734.tsp",
+            "China" : "ch71009.tsp"
 	    }
 
 

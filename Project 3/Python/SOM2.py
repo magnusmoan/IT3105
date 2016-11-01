@@ -73,5 +73,4 @@ def run():
 	
         plot_graph(cities, neurons, country, num_iterations)
 
-run()
 

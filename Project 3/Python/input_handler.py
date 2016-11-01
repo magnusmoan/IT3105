@@ -1,4 +1,5 @@
 import utils
+import sys
 
 decay_funcs = ['Linear', 'Exponential', 'Static']
 no_of_funcs = len(decay_funcs)
@@ -37,7 +38,7 @@ def get_k():
 
     if k.isdigit():
         print "k set to " + str(k) + ".\n"
-        return k
+        return int(k)
 
     else:
         print "You need to enter an integer. \n"
@@ -51,7 +52,7 @@ def get_n():
 
     if n.isdigit():
         print "Number of iterations set to " + str(n) + ".\n"
-        return n
+        return int(n)
 
     else:
         print "You need to enter an integer. \n"
@@ -69,7 +70,8 @@ def get_country():
         a = utils.get_nodes(country)
         print "Setting " + country + " as country.\n"
         return country
-    except e:
+    except:
+        print sys.exc_info()[0]
         print "The country you entered does not exist in the database.\n"
         return get_country()
 
@@ -87,6 +89,7 @@ def get_input_parameters():
             print str(i+1) + ") " + options[i]
 
         chosen = raw_input("Enter number (1 - " + str(no_of_options) + "): ")
+        print ""
         if chosen == 'q' or chosen == 'quit' or len(chosen) == 0:
             return -1
 
@@ -114,7 +117,7 @@ def get_input_parameters():
         elif chosen == 6:
             return parameters
         elif chosen == 7:
-            return {"n": None, "k": None, "l_r": None, "n_r": None, "country": None}
+            return {"n": None, "k": None, "l_r": None, "n_r": None, "country": None, "init_l_r": None, "init_radius": None}
         else:
             "Print invalid option chosen"
 
