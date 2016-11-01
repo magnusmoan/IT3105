@@ -61,7 +61,7 @@ def main():
     while parameters != -1:
         set_default_parameters(parameters) 
         print parameters
-        #run(parameters)
+        run(parameters)
         parameters = get_input_parameters()
 
 main()
