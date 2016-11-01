@@ -6,8 +6,8 @@ DEFAULT_N = 500
 DEFAULT_K = 25
 DEFAULT_L_RATE = .99
 DEFAULT_RADIUS = 3
-DEFAULT_L_DECAY_FUNC = exponential
-DEFAULT_R_DECAY_FUNC = exponential
+DEFAULT_L_DECAY_FUNC = linear
+DEFAULT_R_DECAY_FUNC = linear
 DEFAULT_EXPONENTIAL_RATE = 10.0
 DEFAULT_COUNTRY = "Western-Sahara"
 
@@ -26,23 +26,28 @@ def set_default_parameters(parameters):
 
 
     learning_decay_func = parameters['l_r']
+    print learning_decay_func
     if learning_decay_func == None:
         parameters['l_r'] = DEFAULT_L_DECAY_FUNC( parameters['init_l_r'] / parameters['n'] )
+        #parameters['l_r'] = DEFAULT_L_DECAY_FUNC( DEFAULT_EXPONENTIAL_RATE)
     elif learning_decay_func == 'Linear':
         parameters['l_r'] = linear(parameters['init_l_r'] / parameters['n'])
     elif learning_decay_func == 'Exponential':
+        print "Test"
         parameters['l_r'] = exponential( DEFAULT_EXPONENTIAL_RATE )
     elif learning_decay_func == 'Static':
         parameters['l_r'] = static
 
-    learning_decay_func = parameters['n_r']
-    if learning_decay_func == None:
+    radius_decay_func = parameters['n_r']
+    if radius_decay_func == None:
         parameters['n_r'] = DEFAULT_L_DECAY_FUNC( parameters['init_radius'] / parameters['n'] )
-    elif learning_decay_func == 'Linear':
+        #parameters['n_r'] = DEFAULT_R_DECAY_FUNC( DEFAULT_EXPONENTIAL_RATE)
+    elif radius_decay_func == 'Linear':
         parameters['n_r'] = linear(parameters['init_radius'] / parameters['n'])
-    elif learning_decay_func == 'Exponential':
+    elif radius_decay_func == 'Exponential':
+        print "Test2"
         parameters['n_r'] = exponential( DEFAULT_EXPONENTIAL_RATE )
-    elif learning_decay_func == 'Static':
+    elif radius_decay_func == 'Static':
         parameters['n_r'] = static
 
     if parameters['country'] == None:
