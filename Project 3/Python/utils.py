@@ -62,7 +62,8 @@ def linear(delta):
     return lambda x: x - delta
 
 def exponential(lam):
-    return lambda x: math.exp(- x / lam)
+    print "dude",lam
+    return lambda x: math.exp(- float(x) / lam)
 
 def static(rate):
     return rate

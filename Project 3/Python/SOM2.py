@@ -56,6 +56,9 @@ def run(parameters):
 	decay_learning = parameters['l_r']
 	decay_radius = parameters['n_r']
 
+	print "hey", decay_radius(0)
+	print "loco",decay_learning(0)
+
         learning_rate = parameters['init_l_r']
         radius = parameters['init_radius']
 
