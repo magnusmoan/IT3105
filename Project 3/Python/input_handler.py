@@ -36,6 +36,7 @@ def get_k():
         return -1
 
     if k.isdigit():
+        print "k set to " + str(k) + ".\n"
         return k
 
     else:
@@ -49,6 +50,7 @@ def get_n():
         return -1
 
     if n.isdigit():
+        print "Number of iterations set to " + str(n) + ".\n"
         return n
 
     else:
@@ -60,18 +62,19 @@ def get_country():
     country = raw_input("Country name: ")
 
     if country == "quit" or country == "q" or len(country) == 0:
+        print "True"
         return -1
     
     try:
         a = utils.get_nodes(country)
         print "Setting " + country + " as country.\n"
         return country
-    except:
-        print "The country you entered does not exist in the database."
+    except e:
+        print "The country you entered does not exist in the database.\n"
         return get_country()
 
 
-def show_menu():
+def get_input_parameters():
     no_of_options = len(options)
 
     parameters = {"n": None, "k": None, "l_r": None, "n_r": None, "country": None}
@@ -115,10 +118,9 @@ def show_menu():
         else:
             "Print invalid option chosen"
 
-        if value == '-1':
+        if value == -1:
             return value
 
         parameters[chosen] = value
 
-
-show_menu()
+get_input_parameters()

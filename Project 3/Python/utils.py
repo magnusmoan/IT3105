@@ -16,10 +16,10 @@ country_mapping = {
 def get_nodes(country_id):
 	"Takes country_id as input and gets the coordinates from the web-page"
 	nodes = []
-        internet = False
+        internet = True
 
         if internet:
-            data = urllib2.urlopen("http://www.math.uwaterloo.ca/tsp/world/" + country_id)
+            data = urllib2.urlopen("http://www.math.uwaterloo.ca/tsp/world/" + country_mapping[country_id])
         else:
             data = open("./../data/" + country_mapping[country_id], 'r')
 	for line in data:
