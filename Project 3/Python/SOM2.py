@@ -1,7 +1,13 @@
 from random import random
 from utils import *
 from graph_generator import plot_graph
+from time import time
 import math
+
+start = time()
+closest = 0
+find_neigh = 0
+update = 0
 
 def find_closest_neuron(neurons, city):
 	""" Returns index j of the neuron closest to city i """
@@ -20,14 +26,21 @@ def find_neighbours(neurons, j, radius):
 def update_weights(neurons, city, learning_rate, radius):
 	""" The function finds the closest neuron j to city i, and its 
 	neighborhood, and updates the neuron positions """
+        global closest, find_neigh, update
 	
+        time1 = time()
 	closest_neuron = find_closest_neuron(neurons, city)
+        closest += time() - time1
+        time2 = time()
 	neighbourhood = find_neighbours(neurons, closest_neuron, radius)
+        find_neigh += time() - time2
 
+        time3 = time() 
 	for (j, dist) in neighbourhood:
 		discount = learning_rate * math.exp(- dist**2 / (2 * radius**2 ))
 		neurons[j][0] += discount * (city[0] - neurons[j][0])
 		neurons[j][1] += discount * (city[1] - neurons[j][1])
+        update += time() - time3
 
 
 def calculate_travelers_distance(neurons):
@@ -63,6 +76,9 @@ def run(parameters):
 		learning_rate = decay_learning(learning_rate)
 		radius = decay_radius(radius)
 	
+        print "Find neighbor: " + str(find_neigh)
+        print "Closest: " + str(closest)
+        print "Update: " + str(update)
         plot_graph(cities, neurons, country, num_iterations)
 
 
