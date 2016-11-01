@@ -2,17 +2,16 @@ from SOM2 import run
 from input_handler import get_input_parameters
 from utils import linear, static, exponential
 
-DEFAULT_N = 100
+DEFAULT_N = 500
 DEFAULT_K = 25
 DEFAULT_L_RATE = .99
 DEFAULT_RADIUS = 3
-DEFAULT_L_DECAY_FUNC = linear
-DEFAULT_R_DECAY_FUNC = linear
-DEFAULT_EXPONENTIAL_RATE = 5
+DEFAULT_L_DECAY_FUNC = exponential
+DEFAULT_R_DECAY_FUNC = exponential
+DEFAULT_EXPONENTIAL_RATE = 10.0
 DEFAULT_COUNTRY = "Western-Sahara"
 
 def set_default_parameters(parameters):
-    print parameters
     if parameters['n'] == None:
         parameters['n'] = DEFAULT_N
 
@@ -60,7 +59,6 @@ def main():
 
     while parameters != -1:
         set_default_parameters(parameters) 
-        print parameters
         run(parameters)
         parameters = get_input_parameters()
 
