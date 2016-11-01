@@ -77,7 +77,7 @@ def get_country():
 def get_input_parameters():
     no_of_options = len(options)
 
-    parameters = {"n": None, "k": None, "l_r": None, "n_r": None, "country": None}
+    parameters = {"n": None, "k": None, "l_r": None, "n_r": None, "country": None, "init_l_r": None, "init_radius": None}
 
     while True:
     
@@ -123,4 +123,3 @@ def get_input_parameters():
 
         parameters[chosen] = value
 
-get_input_parameters()
