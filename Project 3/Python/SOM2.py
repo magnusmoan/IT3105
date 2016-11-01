@@ -34,9 +34,9 @@ def update_weights(neurons, i):
 	neighbourhood = find_neighbours(neurons, closest_neuron)
 
 	for (j, dist) in neighbourhood:
-		theta = learning_rate * (radius - abs(closest_neuron - j))/radius
-		neurons[j][0] += theta * (cities[i][0] - neurons[j][0])
-		neurons[j][1] += theta * (cities[i][1] - neurons[j][1])
+		discount = learning_rate * math.exp(- dist**2 / (2 * radius**2 ))
+		neurons[j][0] += discount * (cities[i][0] - neurons[j][0])
+		neurons[j][1] += discount * (cities[i][1] - neurons[j][1])
 
 def calculate_travelers_distance(neurons):
 	bridge = euclidean_distance(neurons[0],neurons[-1])
