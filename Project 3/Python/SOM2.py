@@ -59,8 +59,7 @@ def run(parameters):
 	neurons = init_neurons(no_of_neurons) 
 
         # Draw the initialize situation
-        graph = plot_graph(cities, neurons, country, 0)
-        raw_input("See graph for the initial situation. Press any key to start running the algorithm.")
+        plot_graph(cities, neurons, country, 0, "initial_plot")
 
         # Set the parameters for the linear decay functions. Does currently not allow for exponential
         # decay functions.
@@ -71,8 +70,10 @@ def run(parameters):
 
                 # Update the graph every iteration
                 if r % K == 0:
-                    graph = update_graph(neurons, country, r, graph)
                     print "Current total TSP distance: ", calculate_travelers_distance(neurons)
+
+                if r == num_iterations / 2:
+                    plot_graph(cities, neurons, country, r, "half_way_plot")
 
                 # Make sure radius is an integer
                 radius = int(math.floor(radius))
@@ -89,4 +90,6 @@ def run(parameters):
         # Force the neuron closest to each city to have the exact position of that city.
         for _, city in enumerate(cities):
             update_weights(neurons, city, 1, 0, no_of_neurons)
-        update_graph(neurons, country, 100, graph)
+
+        plot_graph(cities, neurons, country, num_iterations, "final_plot")
+        print ""
