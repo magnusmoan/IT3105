@@ -1,6 +1,6 @@
 from random import random, choice
 from utils import *
-from graph_generator import plot_graph, update_graph
+from graph_generator import plot_graph, update_graph, show_final_graph
 from time import time
 import math
 
@@ -43,7 +43,7 @@ def run(parameters):
 	decay_learning = parameters['l_r']
 	decay_radius = parameters['n_r']
 
-        learning_rate = parameters['init_l_r']
+        learning_rate0 = learning_rate = parameters['init_l_r']
         radius0 = radius = parameters['init_radius']
 
         num_iterations = parameters['n']
@@ -54,12 +54,15 @@ def run(parameters):
         graph = plot_graph(cities, neurons, country, num_iterations)
 
 	for r in xrange(num_iterations):
-                graph = update_graph(neurons, country, graph)
+                if r % 200 == 0:
+                    graph = update_graph(neurons, country, graph)
+                print r
+                radius = int(math.floor(radius))
 		update_weights(neurons, choice(cities), learning_rate, radius, no_of_neurons)
 	    		
-		learning_rate = decay_learning(learning_rate, r)
-                radius = int(math.floor(decay_radius(radius0, r)))
+		learning_rate = decay_learning(learning_rate0, r)
+                radius = decay_radius(radius0, r)
+
 	
-        plot_graph(cities, neurons, country, num_iterations)
 
 

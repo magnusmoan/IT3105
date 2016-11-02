@@ -59,7 +59,7 @@ def euclidean_distance(start,end):
 
 
 def linear(delta):
-    return lambda x, t: x - delta
+    return lambda x, t: x - delta*t
 
 def exponential(lam):
     return lambda x, t: x*math.exp(-t/lam)
