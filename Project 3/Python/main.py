@@ -2,13 +2,14 @@ from SOM2 import run
 from input_handler import get_input_parameters
 from utils import linear, static, exponential
 
-DEFAULT_N = 500
+DEFAULT_N = 5000
 DEFAULT_K = 25
-DEFAULT_L_RATE = .99
+DEFAULT_L_RATE = .9
+DEFAULT_MIN_L_RATE = 0.1
 DEFAULT_RADIUS = 3
 DEFAULT_L_DECAY_FUNC = linear
 DEFAULT_R_DECAY_FUNC = linear
-DEFAULT_EXPONENTIAL_RATE = 10.0
+DEFAULT_EXPONENTIAL_RATE = 1000
 DEFAULT_COUNTRY = "Western-Sahara"
 
 def set_default_parameters(parameters):
@@ -24,16 +25,13 @@ def set_default_parameters(parameters):
     if parameters['init_radius'] == None:
         parameters['init_radius'] = DEFAULT_RADIUS
 
-
     learning_decay_func = parameters['l_r']
-    print learning_decay_func
     if learning_decay_func == None:
-        parameters['l_r'] = DEFAULT_L_DECAY_FUNC( parameters['init_l_r'] / parameters['n'] )
+        parameters['l_r'] = DEFAULT_L_DECAY_FUNC( (parameters['init_l_r'] - DEFAULT_MIN_L_RATE) / parameters['n'] )
         #parameters['l_r'] = DEFAULT_L_DECAY_FUNC( DEFAULT_EXPONENTIAL_RATE)
     elif learning_decay_func == 'Linear':
         parameters['l_r'] = linear(parameters['init_l_r'] / parameters['n'])
     elif learning_decay_func == 'Exponential':
-        print "Test"
         parameters['l_r'] = exponential( DEFAULT_EXPONENTIAL_RATE )
     elif learning_decay_func == 'Static':
         parameters['l_r'] = static
@@ -45,7 +43,6 @@ def set_default_parameters(parameters):
     elif radius_decay_func == 'Linear':
         parameters['n_r'] = linear(parameters['init_radius'] / parameters['n'])
     elif radius_decay_func == 'Exponential':
-        print "Test2"
         parameters['n_r'] = exponential( DEFAULT_EXPONENTIAL_RATE )
     elif radius_decay_func == 'Static':
         parameters['n_r'] = static

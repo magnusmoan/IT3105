@@ -59,11 +59,11 @@ def euclidean_distance(start,end):
 
 
 def linear(delta):
-    return lambda x: x - delta
+    return lambda x, t: x - delta
 
 def exponential(lam):
-    print "dude",lam
-    return lambda x: math.exp(- float(x) / lam)
+    return lambda x, t: x*math.exp(-t/lam)
 
-def static(rate):
+
+def static(rate, t):
     return rate
