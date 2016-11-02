@@ -53,10 +53,10 @@ def run(parameters):
 
         # Initialize neurons
         no_of_neurons = len(cities) * 3
-        neurons = [[random(), random()] for _ in xrange(no_of_neurons)]
+        #neurons = [[random(), random()] for _ in xrange(no_of_neurons)]
 
         # Uncomment the following line to initialize neurons in a circle
-	#neurons = init_neurons(no_of_neurons) 
+	neurons = init_neurons(no_of_neurons) 
 
         # Draw the initialize situation
         graph = plot_graph(cities, neurons, country, 0)
@@ -89,4 +89,4 @@ def run(parameters):
         # Force the neuron closest to each city to have the exact position of that city.
         for _, city in enumerate(cities):
             update_weights(neurons, city, 1, 0, no_of_neurons)
-            update_graph(neurons, country, 100, graph)
+        update_graph(neurons, country, 100, graph)
