@@ -2,11 +2,11 @@ from SOM2 import run
 from input_handler import get_input_parameters
 from utils import linear, static, exponential
 
-DEFAULT_N = 5000
-DEFAULT_K = 25
+DEFAULT_N = 100
+DEFAULT_K = 10
 DEFAULT_L_RATE = .9
 DEFAULT_MIN_L_RATE = 0.1
-DEFAULT_RADIUS = 6.0
+DEFAULT_RADIUS = 10.0
 DEFAULT_L_DECAY_FUNC = linear
 DEFAULT_R_DECAY_FUNC = linear
 DEFAULT_EXPONENTIAL_RATE = 1000
@@ -19,31 +19,29 @@ def set_default_parameters(parameters):
     if parameters['k'] == None:
         parameters['k'] = DEFAULT_K
 
-    if parameters['init_l_r'] == None:
-        parameters['init_l_r'] = DEFAULT_L_RATE
+    if parameters['init_learning_rate'] == None:
+        parameters['init_learning_rate'] = DEFAULT_L_RATE
 
     if parameters['init_radius'] == None:
         parameters['init_radius'] = DEFAULT_RADIUS
 
     learning_decay_func = parameters['l_r']
     if learning_decay_func == None:
-        parameters['l_r'] = DEFAULT_L_DECAY_FUNC( (parameters['init_l_r'] - DEFAULT_MIN_L_RATE) / parameters['n'] )
-        #parameters['l_r'] = DEFAULT_L_DECAY_FUNC( DEFAULT_EXPONENTIAL_RATE)
+        parameters['l_r'] = DEFAULT_L_DECAY_FUNC
     elif learning_decay_func == 'Linear':
-        parameters['l_r'] = linear(parameters['init_l_r'] / parameters['n'])
+        parameters['l_r'] = linear
     elif learning_decay_func == 'Exponential':
-        parameters['l_r'] = exponential( DEFAULT_EXPONENTIAL_RATE )
+        parameters['l_r'] = exponential
     elif learning_decay_func == 'Static':
         parameters['l_r'] = static
 
     radius_decay_func = parameters['n_r']
     if radius_decay_func == None:
-        parameters['n_r'] = DEFAULT_L_DECAY_FUNC( parameters['init_radius'] / parameters['n'] )
-        #parameters['n_r'] = DEFAULT_R_DECAY_FUNC( DEFAULT_EXPONENTIAL_RATE)
+        parameters['n_r'] = DEFAULT_R_DECAY_FUNC
     elif radius_decay_func == 'Linear':
-        parameters['n_r'] = linear(parameters['init_radius'] / parameters['n'])
+        parameters['n_r'] = linear
     elif radius_decay_func == 'Exponential':
-        parameters['n_r'] = exponential( DEFAULT_EXPONENTIAL_RATE )
+        parameters['n_r'] = exponential
     elif radius_decay_func == 'Static':
         parameters['n_r'] = static
 

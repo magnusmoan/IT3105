@@ -55,11 +55,11 @@ def normalize_nodes(country):
 	return np.array(nodes_normalized)
 
 def euclidean_distance(start,end):
-    return math.sqrt( (end[0] - start[0])**2 + (end[0] - start[0])**2 )
+    return math.sqrt( (end[0] - start[0])**2 + (end[1] - start[1])**2 )
 
 
-def linear(delta):
-    return lambda x, t: x - delta*t
+def linear(x, t, delta):
+    return x - t*delta
 
 def exponential(lam):
     return lambda x, t: x*math.exp(-t/lam)

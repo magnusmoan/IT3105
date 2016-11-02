@@ -9,4 +9,3 @@ Implementation
 - Illustrate the progress of the TSP by printing out the total distance encoded by the neuron-ring scaffolding (?). This have to be done every k steps of the algorithm, where k is user-specified. 
 
 
-

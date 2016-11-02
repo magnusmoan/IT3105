@@ -79,10 +79,10 @@ def get_country():
 def get_input_parameters():
     no_of_options = len(options)
 
-    parameters = {"n": None, "k": None, "l_r": None, "n_r": None, "country": None, "init_l_r": None, "init_radius": None}
+    parameters = {"n": None, "k": None, "l_r": None, "n_r": None, 
+            "country": None, "init_learning_rate": None, "init_radius": None}
 
     while True:
-    
         print "Please select an option: "
 
         for i in range(no_of_options):
@@ -117,7 +117,8 @@ def get_input_parameters():
         elif chosen == 6:
             return parameters
         elif chosen == 7:
-            return {"n": None, "k": None, "l_r": None, "n_r": None, "country": None, "init_l_r": None, "init_radius": None}
+            return {"n": None, "k": None, "l_r": None, "n_r": None, 
+                    "country": None, "init_learning_rate": None, "init_radius": None}
         else:
             "Print invalid option chosen"
 
