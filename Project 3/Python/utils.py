@@ -58,10 +58,11 @@ def euclidean_distance(start,end):
     return math.sqrt( (end[0] - start[0])**2 + (end[1] - start[1])**2 )
 
 
-def linear(x, t, delta):
-    return x - t*delta
+def linear(delta):
+    return lambda x, t: x - delta*t
 
 def exponential(lam):
+    print lam
     return lambda x, t: x*math.exp(-t/lam)
 
 

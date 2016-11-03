@@ -80,7 +80,8 @@ def get_input_parameters():
     no_of_options = len(options)
 
     parameters = {"n": None, "k": None, "l_r": None, "n_r": None, 
-            "country": None, "init_learning_rate": None, "init_radius": None}
+            "country": None, "init_learning_rate": None, "init_radius": None,
+            "lambda_learning": None, "lambda_radius": None}
 
     while True:
         print "Please select an option: "
@@ -118,7 +119,8 @@ def get_input_parameters():
             return parameters
         elif chosen == 7:
             return {"n": None, "k": None, "l_r": None, "n_r": None, 
-                    "country": None, "init_learning_rate": None, "init_radius": None}
+                    "country": None, "init_learning_rate": None, "init_radius": None,
+                    "lambda_learning": None, "lambda_radius": None}
         else:
             "Print invalid option chosen"
 

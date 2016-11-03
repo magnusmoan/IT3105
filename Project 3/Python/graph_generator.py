@@ -18,10 +18,10 @@ def plot_graph(city_nodes, neurons, country, iterationNo, plotName):
     plt.title("SOM solving TSP for " + country + ".\nIteration number: " + str(iterationNo))
 
     try:
-        plt.savefig("plots/" + country + "/" + plotName)
+        plt.savefig("../plots/" + country + "/" + plotName)
     except IOError:
-        mkdir("plots/" + country)
-        plt.savefig("plots/" + country + "/" + plotName)
+        mkdir("../plots/" + country)
+        plt.savefig("../plots/" + country + "/" + plotName)
 
 
 def update_graph(neurons, country, iterationNo, plot):

@@ -46,7 +46,6 @@ def run(parameters):
 
 	decay_learning = parameters['l_r']
 	decay_radius = parameters['n_r']
-        radius0 = radius = parameters['init_radius']
         learning_rate0 = learning_rate = parameters['init_learning_rate']
 
         cities = normalize_nodes(country)
@@ -61,11 +60,22 @@ def run(parameters):
         # Draw the initialize situation
         plot_graph(cities, neurons, country, 0, "initial_plot")
 
-        # Set the parameters for the linear decay functions. Does currently not allow for exponential
-        # decay functions.
-        delta_learning = ( float(learning_rate0) - .01) / num_iterations
-        delta_radius = radius0 / float(num_iterations)
+        radius0 = radius = float(no_of_neurons) / parameters['init_radius']
 
+        learning_func_name = decay_learning.__name__
+        if learning_func_name == 'exponential':
+            decay_learning = decay_learning(parameters['lambda_learning'])
+        elif learning_func_name == 'linear':
+            decay_learning = decay_learning(( float(learning_rate0) - parameters['learning_min_rate']) / num_iterations)
+
+        radius_func_name = decay_radius.__name__
+        if radius_func_name == 'exponential':
+            decay_radius = decay_radius(parameters['lambda_radius'])
+        elif radius_func_name == 'linear':
+            decay_radius = decay_radius(radius0 / float(num_iterations))
+
+        print radius0
+        return
 	for r in xrange(1, num_iterations-1):
 
                 # Update the graph every iteration
@@ -84,8 +94,8 @@ def run(parameters):
 		    update_weights(neurons, city, learning_rate, radius, no_of_neurons)
 
                 # Update learning rate and radius
-                learning_rate = decay_learning(learning_rate0, r, delta_learning)
-                radius = decay_radius(radius0, r, delta_radius)
+                learning_rate = decay_learning(learning_rate0, r)
+                radius = decay_radius(radius0, r)
 
         # Force the neuron closest to each city to have the exact position of that city.
         for _, city in enumerate(cities):

@@ -5,11 +5,12 @@ from utils import linear, static, exponential
 DEFAULT_N = 100
 DEFAULT_K = 10
 DEFAULT_L_RATE = .9
-DEFAULT_MIN_L_RATE = 0.1
+DEFAULT_MIN_L_RATE = 0.01
 DEFAULT_RADIUS = 10.0
 DEFAULT_L_DECAY_FUNC = linear
 DEFAULT_R_DECAY_FUNC = linear
-DEFAULT_EXPONENTIAL_RATE = 1000
+DEFAULT_EXPONENTIAL_RATE_RADIUS = 1000
+DEFAULT_EXPONENTIAL_RATE_LEARNING = 1000
 DEFAULT_COUNTRY = "Western-Sahara"
 
 def set_default_parameters(parameters):
@@ -48,6 +49,13 @@ def set_default_parameters(parameters):
     if parameters['country'] == None:
         parameters['country'] = DEFAULT_COUNTRY
 
+    if parameters['lambda_learning'] == None:
+        parameters['lambda_learning'] = DEFAULT_EXPONENTIAL_RATE_LEARNING
+
+    if parameters['lambda_radius'] == None:
+        parameters['lambda_radius'] = DEFAULT_EXPONENTIAL_RATE_RADIUS
+
+    parameters['learning_min_rate'] = DEFAULT_MIN_L_RATE
 
 def main():
     print "#"*67
