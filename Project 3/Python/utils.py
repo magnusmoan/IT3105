@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from time import time
 import urllib2
-import math
+from math import radians, cos, sin, asin, sqrt, exp
 import numpy as np
 from graph_generator import plot_graph
 
@@ -52,19 +52,39 @@ def normalize_nodes(country):
 
             nodes_normalized.append([x_norm, y_norm])
 
-	return np.array(nodes_normalized)
+	return np.array(nodes_normalized), (interval_x, interval_y), (min_x, min_y)
+
+def nodes_to_coordinates(neurons, interval_x, interval_y, min_x, min_y):
+    neuron_coordinates = []
+    for i in xrange(len(neurons)):
+        x = neurons[i][0] * interval_x + min_x
+        y = neurons[i][1] * interval_y + min_y
+        neuron_coordinates.append((x,y))
+
+    return neuron_coordinates
 
 def euclidean_distance(start,end):
-    return math.sqrt( (end[0] - start[0])**2 + (end[1] - start[1])**2 )
-
+    return sqrt( (end[0] - start[0])**2 + (end[1] - start[1])**2 )
 
 def linear(delta):
     return lambda x, t: x - delta*t
 
 def exponential(lam):
-    print lam
-    return lambda x, t: x*math.exp(-t/lam)
-
+    return lambda x, t: x*exp(-t/lam)
 
 def static(rate, t):
     return rate
+
+def is_int(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False
+
+def is_float(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False

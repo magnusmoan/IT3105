@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
-from os import mkdir
+import os
 
 # Input: Normalized coordinate lists representing cities and neurons.
-def plot_graph(city_nodes, neurons, country, iterationNo, plotName):
+def plot_graph(city_nodes, neurons, country, iteration_no, plot_name, total_distance):
 
     fig, ax = plt.subplots()
     fig.canvas.set_window_title("IT3105: Project 3")
@@ -15,19 +15,19 @@ def plot_graph(city_nodes, neurons, country, iterationNo, plotName):
 
     plt.axis([-0.1,1.1,-0.1,1.1])
     plt.legend(bbox_to_anchor=(1.1, 1.1))
-    plt.title("SOM solving TSP for " + country + ".\nIteration number: " + str(iterationNo))
+    plt.title("SOM solving TSP for " + country + ".\nIteration number: " + str(iteration_no) +
+            "\nTotal distance (D): " + '{0:.0f}'.format(total_distance))
 
+    if plot_name == "initial_plot":
+        try:
+            for file in os.listdir("../plots/" + country):
+                os.remove("../plots/" + country + "/" + file)
+        except OSError:
+            pass
     try:
-        plt.savefig("../plots/" + country + "/" + plotName)
+        plt.savefig("../plots/" + country + "/" + str(plot_name))
     except IOError:
-        mkdir("../plots/" + country)
-        plt.savefig("../plots/" + country + "/" + plotName)
+        os.mkdir("../plots/" + country)
+        plt.savefig("../plots/" + country + "/" + str(plot_name))
 
-
-def update_graph(neurons, country, iterationNo, plot):
-    plot[1].set_data(*zip(*neurons))
-    plot[0].set_data([neurons[-1][0], neurons[0][0]], [neurons[-1][1], neurons[0][1]])
-    plt.title("SOM solving TSP for " + country + ".\nIteration number: " + str(iterationNo))
-    plt.pause(.1)
-    return (plot[0], plot[1])
-
+    plt.close()
