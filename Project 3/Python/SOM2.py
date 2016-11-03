@@ -3,6 +3,7 @@ from utils import *
 from graph_generator import plot_graph
 from time import time
 import math
+import numpy as np
 
 def init_neurons(no_of_neurons):
     neurons = []
@@ -13,8 +14,7 @@ def init_neurons(no_of_neurons):
         y = .5 + .3 * math.sin(deg)
         x = .5 + .3 * math.cos(deg)
         deg += delta_deg
-        neurons.append([x,y])
-
+        neurons.append(np.array([x,y]))
     return neurons
 
 
@@ -31,8 +31,10 @@ def update_weights(neurons, city, learning_rate, radius, no_of_neurons):
         for i in xrange(j - radius, j + radius + 1):
             discount = 1.0 / ( abs(j - i) + 1 )
             index = i % no_of_neurons
-            neurons[index][0] += learning_rate * discount * (city[0] - neurons[index][0])
-            neurons[index][1] += learning_rate * discount * (city[1] - neurons[index][1])
+            added_value = learning_rate * discount * np.subtract(city, neurons[index])
+            neurons[index] = np.add(neurons[index], added_value)
+            #neurons[index][0] += learning_rate * discount * (city[0] - neurons[index][0])
+            #neurons[index][1] += learning_rate * discount * (city[1] - neurons[index][1])
 
 def calculate_travelers_distance(neurons):
 	bridge = euclidean_distance(neurons[0],neurons[-1])
@@ -77,6 +79,7 @@ def run(parameters):
         print "Lambda learning: ", parameters['lambda_learning']
         print "Lambda radius: ", parameters['lambda_radius']
         raw_input("Press any button to start running the algorithm")
+        start = time()
 
         learning_func_name = decay_learning.__name__
         if learning_func_name == 'exponential':
@@ -119,3 +122,4 @@ def run(parameters):
         D = calculate_travelers_distance(neurons_in_coordinates)
         plot_graph(cities, neurons, country, num_iterations, "final_plot", D)
         print "Plots have been generated and added to the folder ../plots/" + country
+        print time() - start

@@ -27,7 +27,7 @@ def get_nodes(country_id):
 		line_list = line.split(" ")
 		if line_list[0].isdigit():
 			latitude, longitude = line_list[1], line_list[2][:-2]
-			nodes.append([float(latitude), float(longitude)])
+			nodes.append(np.array([float(latitude), float(longitude)]))
         data.close()
 	return nodes
 
@@ -50,7 +50,7 @@ def normalize_nodes(country):
             x_norm = (x - min_x) / interval_x
             y_norm = (y - min_y) / interval_y
 
-            nodes_normalized.append([x_norm, y_norm])
+            nodes_normalized.append(np.array([x_norm, y_norm]))
 
 	return np.array(nodes_normalized), (interval_x, interval_y), (min_x, min_y)
 
