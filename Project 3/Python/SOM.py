@@ -36,15 +36,31 @@ def update_weights(neurons, city, learning_rate, radius, no_of_neurons):
             #neurons[index][0] += learning_rate * discount * (city[0] - neurons[index][0])
             #neurons[index][1] += learning_rate * discount * (city[1] - neurons[index][1])
 
-def calculate_travelers_distance(neurons):
-	bridge = euclidean_distance(neurons[0],neurons[-1])
-	return sum([euclidean_distance(neurons[j], neurons[j+1]) for j in range(len(neurons) - 1)]) + bridge
+def map_neurons_to_cities(neurons, cities):
+        neuron_to_city = {}
+        neurons_list = neurons[:]
+        count = 0
+        for city in cities:
+            closest_neuron = find_closest_neuron(neurons_list, city, len(neurons_list))
+            neurons_list[closest_neuron] = [1000,1000]
+            neuron_to_city[closest_neuron] = city
+        cities_in_order = []
+        for index, neuron in enumerate(neurons):
+            if index in neuron_to_city:
+                cities_in_order.append(neuron_to_city[index])
+
+        return cities_in_order
+
+def calculate_travelers_distance(travelling_route):
+	bridge = euclidean_distance(travelling_route[0], travelling_route[-1])
+	return sum([euclidean_distance(travelling_route[j], travelling_route[j+1]) for j in range(len(travelling_route) - 1)]) + bridge
 
 def run(parameters):
         # Initialize parameters given from user
         num_iterations = parameters['n']
         K = parameters['k']
         country = parameters['country']
+        show_graph = parameters['show_graph']
 
 	decay_learning = parameters['l_r']
 	decay_radius = parameters['n_r']
@@ -60,24 +76,26 @@ def run(parameters):
 	neurons = init_neurons(no_of_neurons) 
 
         # Draw the initialize situation
-        neurons_in_coordinates = nodes_to_coordinates(neurons, interval_x, interval_y, min_x, min_y)
-        D = calculate_travelers_distance(neurons_in_coordinates)
+        travelling_route = map_neurons_to_cities(neurons, cities)
+        travelling_route = nodes_to_coordinates(travelling_route, interval_x, interval_y, min_x, min_y)
+        D = calculate_travelers_distance(travelling_route)
         plot_graph(cities, neurons, country, 0, "initial_plot", D)
 
         radius0 = radius = float(no_of_neurons) * (parameters['init_radius'] / float(100))
 
         print "\nCurrent parameters"
-        print "Iterations: ", num_iterations
-        print "K: ", K
-        print "Country: ", country
-        print "Learning0: ", learning_rate0
-        print "Radius0: ", radius0
-        print "Learning func: ", decay_learning.__name__
-        print "Radius func: ", decay_radius.__name__
-        print "Learning min: ", parameters['learning_min_rate']
-        print "Radius min: ", parameters['radius_min']
-        print "Lambda learning: ", parameters['lambda_learning']
-        print "Lambda radius: ", parameters['lambda_radius']
+        print "Iterations:", num_iterations
+        print "K:", K
+        print "Graph display rate:", show_graph
+        print "Country:", country
+        print "Learning0:", learning_rate0
+        print "Radius0:", radius0
+        print "Learning func:", decay_learning.__name__
+        print "Radius func:", decay_radius.__name__
+        print "Learning min:", parameters['learning_min_rate']
+        print "Radius min:", parameters['radius_min']
+        print "Lambda learning:", parameters['lambda_learning']
+        print "Lambda radius:", parameters['lambda_radius']
         raw_input("Press any button to start running the algorithm")
         start = time()
 
@@ -98,8 +116,15 @@ def run(parameters):
 
                 # Update the graph every iteration
                 if r % K == 0:
-                    neurons_in_coordinates = nodes_to_coordinates(neurons, interval_x, interval_y, min_x, min_y)
-                    D = calculate_travelers_distance(neurons_in_coordinates)
+                    travelling_route = map_neurons_to_cities(neurons, cities)
+                    travelling_route = nodes_to_coordinates(travelling_route, interval_x, interval_y, min_x, min_y)
+                    D = calculate_travelers_distance(travelling_route)
+                    print "Total travellers distance:", D
+
+                if r % show_graph == 0:
+                    travelling_route = map_neurons_to_cities(neurons, cities)
+                    travelling_route = nodes_to_coordinates(travelling_route, interval_x, interval_y, min_x, min_y)
+                    D = calculate_travelers_distance(travelling_route)
                     plot_graph(cities, neurons, country, r, r, D)
 
                 # Make sure radius is an integer
@@ -118,8 +143,8 @@ def run(parameters):
         for _, city in enumerate(cities):
             update_weights(neurons, city, 1, 0, no_of_neurons)
 
-        neurons_in_coordinates = nodes_to_coordinates(neurons, interval_x, interval_y, min_x, min_y)
-        D = calculate_travelers_distance(neurons_in_coordinates)
+        travelling_route = map_neurons_to_cities(neurons, cities)
+        travelling_route = nodes_to_coordinates(travelling_route, interval_x, interval_y, min_x, min_y)
+        D = calculate_travelers_distance(travelling_route)
         plot_graph(cities, neurons, country, num_iterations, "final_plot", D)
         print "Plots have been generated and added to the folder ../plots/" + country
-        print time() - start

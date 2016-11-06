@@ -20,7 +20,7 @@ def get_nodes(country_id):
         internet = True
 
         if internet:
-            data = urllib2.urlopen("http://www.math.uwaterloo.ca/tsp/world/" + country_mapping[country_id])
+            data = urllib2.urlopen("http://www.math.uwaterloo.ca/tsp/world/" + country_id.lower() + ".tsp")
         else:
             data = open("./../data/" + country_mapping[country_id], 'r')
 	for line in data:

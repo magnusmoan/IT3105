@@ -4,6 +4,7 @@ from utils import linear, static, exponential
 
 DEFAULT_N = 100
 DEFAULT_K = 10
+DEFAULT_SHOW_GRAPH_RATE = 25
 DEFAULT_L_RATE = .9
 DEFAULT_MIN_L_RATE = 0.01
 DEFAULT_MIN_RADIUS = 0.0
@@ -20,6 +21,9 @@ def set_default_parameters(parameters):
 
     if parameters['k'] == None:
         parameters['k'] = DEFAULT_K
+
+    if parameters['show_graph'] == None:
+        parameters['show_graph'] = DEFAULT_SHOW_GRAPH_RATE
 
     learning_decay_func = parameters['l_r']
     if learning_decay_func == None:

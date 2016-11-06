@@ -178,7 +178,7 @@ def get_input_parameters():
 
     parameters = {"n": None, "k": None, "l_r": None, "n_r": None, 
             "country": None, "init_learning_rate": None, "init_radius": None,
-            "lambda_learning": None, "lambda_radius": None}
+            "lambda_learning": None, "lambda_radius": None, "show_graph": None}
 
     while True:
         print "\nPlease select an option or enter \"q\" to exit: "
@@ -220,7 +220,7 @@ def get_input_parameters():
         elif chosen == 8:
             return {"n": None, "k": None, "l_r": None, "n_r": None, 
                     "country": None, "init_learning_rate": None, "init_radius": None,
-                    "lambda_learning": None, "lambda_radius": None}
+                    "lambda_learning": None, "lambda_radius": None, "show_graph": None}
         else:
             "Print invalid option chosen"
 
