@@ -13,7 +13,7 @@ DEFAULT_L_DECAY_FUNC = linear
 DEFAULT_R_DECAY_FUNC = linear
 DEFAULT_EXPONENTIAL_RATE_RADIUS = 20.0
 DEFAULT_EXPONENTIAL_RATE_LEARNING = 20.0
-DEFAULT_COUNTRY = "Western-Sahara"
+DEFAULT_COUNTRY = "wi29" #Western Sahara
 
 def set_default_parameters(parameters):
     if parameters['n'] == None:
