@@ -54,11 +54,11 @@ def diagonal_conflict_count(row, col, solution):
 
 # Subtracts 1 from all numbers in a list and returns the modified list
 def subtract_one_from_list(a):
-    return [x - 1 for x in a]
+    return map(lambda x: x - 1, a)
 
 # Adds 1 to all numbers in the given list and returns the new list
 def add_one_to_list(a):
-    return [x + 1 for x in a]
+    return map(lambda x: x + 1, a)
 
 # Returns a list of all numbers in the range 0 to n that does not occur in a
 def get_all_numbers_not_used(a, n):
@@ -81,12 +81,12 @@ def remove_all_negative(array_with_zeros):
 # Checks if a given starting position is valid for backtracking
 def starting_positions_valid(starting_positions, n):
     if duplicates_in_array(starting_positions):
-        print("Duplicates")
+        print "Duplicates"
         return False
 
     for col, row in enumerate(starting_positions[1:], 1):
         if not no_diagonal_conflict(row, col, starting_positions[:col]):
-            print("Diagonal conflict")
+            print "Diagonal conflict"
             return False
 
     return True
@@ -103,9 +103,9 @@ def generate_random_neighborhood(board, neighborhood_size, max_fitness, n):
     neighborhood = set([])
     n -= 1
 
-    for _ in range(neighborhood_size):
+    for _ in xrange(neighborhood_size):
         x = random.randint(0, n)
-        y = random.choice(list(range(0,x)) + list(range(x+1,n)))
+        y = random.choice(range(0,x) + range(x+1,n))
         neighbor = list(board[:])
         neighbor[x], neighbor[y] = neighbor[y], neighbor[x]
         neighborhood.add((tuple(neighbor), fitness(neighbor, max_fitness)))

@@ -33,8 +33,6 @@ def update_weights(neurons, city, learning_rate, radius, no_of_neurons):
             index = i % no_of_neurons
             added_value = learning_rate * discount * np.subtract(city, neurons[index])
             neurons[index] = np.add(neurons[index], added_value)
-            #neurons[index][0] += learning_rate * discount * (city[0] - neurons[index][0])
-            #neurons[index][1] += learning_rate * discount * (city[1] - neurons[index][1])
 
 def map_neurons_to_cities(neurons, cities):
         neuron_to_city = {}
@@ -69,7 +67,7 @@ def run(parameters):
         cities, (interval_x, interval_y), (min_x, min_y) = normalize_nodes(country)
 
         # Initialize neurons
-        no_of_neurons = len(cities) * 3
+        no_of_neurons = len(cities) * 2
         #neurons = [[random(), random()] for _ in xrange(no_of_neurons)]
 
         # Uncomment the following line to initialize neurons in a circle

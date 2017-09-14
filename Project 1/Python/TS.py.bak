@@ -26,7 +26,7 @@ MAX_ITER_WITHOUT_IMPROVEMENT = 5
 def tabu_search(curr_board):
     max_iterations_left = MAX_ITER_WITHOUT_IMPROVEMENT
     curr_best_fitness = fitness(curr_board, MAX_FITNESS)
-    for iteration in range(MAX_ITER):
+    for iteration in xrange(MAX_ITER):
         print_current_status(MAX_TIME - (time() - start_time), MAX_ITER - iteration, len(SOLUTIONS))
 
         # If we are searching for the first solution we add each step to the step by step list

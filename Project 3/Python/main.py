@@ -1,4 +1,4 @@
-from SOM2 import run
+from SOM import run
 from input_handler import get_input_parameters
 from utils import linear, static, exponential
 
@@ -13,7 +13,7 @@ DEFAULT_L_DECAY_FUNC = linear
 DEFAULT_R_DECAY_FUNC = linear
 DEFAULT_EXPONENTIAL_RATE_RADIUS = 20.0
 DEFAULT_EXPONENTIAL_RATE_LEARNING = 20.0
-DEFAULT_COUNTRY = "wi29" #Western Sahara
+DEFAULT_COUNTRY = "wi29" # Western Sahara
 
 def set_default_parameters(parameters):
     if parameters['n'] == None:

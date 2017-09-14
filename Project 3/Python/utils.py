@@ -17,12 +17,12 @@ country_mapping = {
 def get_nodes(country_id):
 	"Takes country_id as input and gets the coordinates from the web-page"
 	nodes = []
-        internet = True
+        internet = False
 
         if internet:
             data = urllib2.urlopen("http://www.math.uwaterloo.ca/tsp/world/" + country_id.lower() + ".tsp")
         else:
-            data = open("./../data/" + country_mapping[country_id], 'r')
+            data = open("./../data/" + country_id, 'r')
 	for line in data:
 		line_list = line.split(" ")
 		if line_list[0].isdigit():
